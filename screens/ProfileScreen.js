@@ -17,8 +17,6 @@ export default function SettingsScreen() {
   }
 `
 
-
-
   return(
 
     <Query query={ME_QUERY}>
