@@ -6,6 +6,7 @@ import SwipeCards from './SwiperCard.js'
 // import Icon, {drink} from 'react-native-vector-icons/Ionicons'
 
 export default function LinksScreen() {
+  console.log('in LinksScreen')
   return <SwipeCards />
 }
 
