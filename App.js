@@ -25,21 +25,20 @@ export default function App(props) {
     cache: new InMemoryCache()
   });
 
-  client
-    .query({
-      query: gql`
-        {
-          cocktails {
-            id
-          }
+  client.query({
+    query: gql`
+      {
+        cocktails {
+          id
         }
-      `
-    })
-    .then(response =>
-      response.data.cocktails.map(element => {
-        console.log(element.id);
-      })
-    );
+      }
+    `
+  });
+  //   .then(response =>
+  //     response.data.cocktails.map(element => {
+  //       console.log(element.id);
+  //     })
+  //   );
 
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
@@ -53,10 +52,12 @@ export default function App(props) {
     );
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
+      <ApolloProvider client={client}>
+        <View style={styles.container}>
+          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+          <AppNavigator />
+        </View>
+      </ApolloProvider>
     );
   }
 }
