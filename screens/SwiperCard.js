@@ -105,9 +105,9 @@ export default class App extends React.Component {
         loop={false}
         renderCard={cardData => <Card {...cardData} />}
         renderNoMoreCards={() => <NoMoreCards />}
-        showYup={true}
-        showNope={true}
-        showMaybe={true}
+        showYup={false}
+        showNope={false}
+        showMaybe={false}
         hasMaybeAction={true}
         handleYup={this.handleYup}
         handleNope={this.handleNope}

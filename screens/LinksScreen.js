@@ -1,12 +1,16 @@
 import React from 'react'
-import {ScrollView, StyleSheet} from 'react-native'
+import {ScrollView, StyleSheet, View} from 'react-native'
 import {ExpoLinksView} from '@expo/samples'
 import SwipeCards from './SwiperCard.js'
 
 // import Icon, {drink} from 'react-native-vector-icons/Ionicons'
 
 export default function LinksScreen() {
-  return <SwipeCards />
+  return (
+    <View style={styles.container}>
+      <SwipeCards />
+    </View>
+  )
 }
 
 LinksScreen.navigationOptions = {
@@ -17,6 +21,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#fff'
+    backgroundColor: '#D5B9B2'
   }
 })
