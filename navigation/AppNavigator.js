@@ -1,12 +1,37 @@
-import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import {
+  createAppContainer,
+  createSwitchNavigator,
+  createStackNavigator
+} from "react-navigation";
 
-import MainTabNavigator from './MainTabNavigator';
+import AuthLoadingScreen from "../screens/AuthLoadingScreen";
+import LogInScreen from "../screens/LogInScreen";
+import MainTabNavigator from "./MainTabNavigator";
+import HomeScreen from "../screens/HomeScreen";
+import LinksScreen from "../screens/LinksScreen";
+import SettingsScreen from "../screens/SettingsScreen";
+
+// const AppStack = createStackNavigator({
+//   Home: HomeScreen,
+//   Links: LinksScreen,
+//   Settings: SettingsScreen
+// Main: MainTabNavigator
+// });
+const AuthStack = createStackNavigator({ LogIn: LogInScreen });
 
 export default createAppContainer(
-  createSwitchNavigator({
-    // You could add another route here for authentication.
-    // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-    Main: MainTabNavigator,
-  })
+  // SwitchNavigator allows for only one screen to be viewed at a time.
+  createSwitchNavigator(
+    {
+      // Added additional route here for authentication.
+      // Read more at https://reactnavigation.org/docs/en/auth-flow.html
+      AuthLoading: AuthLoadingScreen,
+      Auth: AuthStack,
+      // App: AppStack,
+      Main: MainTabNavigator
+    },
+    {
+      initialRouteName: "AuthLoading"
+    }
+  )
 );
