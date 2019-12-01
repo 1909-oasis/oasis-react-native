@@ -12,24 +12,23 @@ export default class LogIn extends React.Component {
       password: ""
     };
     // this.handleChange = this.handleChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  }
+  // handleChange(event) {
+  //   this.setState({
+  //     [event.nativeEvent.name]: event.nativeEvent.value
+  //   });
+  // }
 
   handleSubmit(event) {
-    // event.preventDefault();
+    event.preventDefault();
     this._signInAsync(this.state.email, this.state.password);
-    // this.setState({
-    //   firstName: "",
-    //   lastName: "",
-    //   email: "",
-    //   password: ""
-    // });
+    this.setState({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: ""
+    });
   }
 
   static navigationOptions = {
@@ -37,6 +36,7 @@ export default class LogIn extends React.Component {
   };
 
   render() {
+    // const { login, email, password, firstName, lastName } = this.state;
     return (
       <View
         style={{
@@ -47,72 +47,79 @@ export default class LogIn extends React.Component {
       >
         {/* Ternary to display Name fields if this is a Sign Up vs. Log In */}
         {!this.state.login && [
-          <Text>First Name:</Text>,
           <TextInput
             style={{
               height: 40,
-              width: 100,
+              width: 150,
               borderBottomWidth: 1,
               borderBottomColor: "#000000"
             }}
+            key={0}
+            placeholder="First Name"
             type="text"
             name="firstName"
             value={this.state.firstName}
-            // onChange={this.handleChange}
+            onChangeText={text => this.setState({ firstName: text })}
+            returnKeyType="next"
           />,
-          <Text>Last Name:</Text>,
           <TextInput
             style={{
               height: 40,
-              width: 100,
+              width: 150,
               borderBottomWidth: 1,
               borderBottomColor: "#000000"
             }}
+            key={1}
+            placeholder="Last Name"
             type="text"
             name="lastName"
             value={this.state.lastName}
-            onChange={this.handleChange}
+            onChangeText={text => this.setState({ lastName: text })}
+            returnKeyType="next"
           />
         ]}
-        <Text>Email:</Text>
         <TextInput
           style={{
             height: 40,
-            width: 100,
+            width: 150,
             borderBottomWidth: 1,
             borderBottomColor: "#000000"
           }}
+          placeholder="Email"
           type="text"
           name="email"
           value={this.state.email}
-          onChange={this.handleChange}
+          onChangeText={text => this.setState({ email: text })}
+          returnKeyType="next"
         />
-        <Text>Password:</Text>
         <TextInput
           style={{
             height: 40,
-            width: 100,
+            width: 150,
             borderBottomWidth: 1,
             borderBottomColor: "#000000"
           }}
+          placeholder="Password"
           type="text"
           name="password"
           value={this.state.password}
-          onChange={this.handleChange}
+          onChangeText={text => this.setState({ password: text })}
           // This secures user input for a field.
           secureTextEntry={true}
+          returnKeyType="done"
         />
         <Button
           title={this.state.login ? "Log In" : "Sign Up"}
           onPress={this.handleSubmit}
         />
         {!this.state.login && [
-          <Text>Already have an account?</Text>,
+          <Text key={2}>Already have an account?</Text>,
           <Button
             title="Log In"
             onPress={() => {
               this.setState({ login: !login });
             }}
+            key={3}
           />
         ]}
       </View>
