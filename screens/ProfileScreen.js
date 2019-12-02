@@ -44,8 +44,8 @@ export default function ProfileScreen() {
           <Text>First Name: {data.me.firstName}</Text>
           <Text>Last Name: {data.me.lastName}</Text>
           <Text>Email: {data.me.email}</Text>
-          {data.recommendationList.map((recCocktail) => {
-          <Text key={recCocktail.id}>recCocktail.name</Text>
+          {data.recommendationList.map((element) => {
+          <Text key={element.cocktail.id}>{element.cocktail.name}</Text>
           })}
       </View>
         )
