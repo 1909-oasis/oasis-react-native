@@ -15,24 +15,6 @@ import gql from "graphql-tag";
 
 import AppNavigator from "./navigation/AppNavigator";
 
-import { ApolloProvider } from 'react-apollo'
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-
-
-const httpLink = createHttpLink({
-  uri: 'https://oasis-1909-804e350939.herokuapp.com/oasis-server-v3/dev'
-})
-
-
-export const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache()
-})
-
-
-
 export default function App(props) {
   //Apollo Client
   const httpLink = createHttpLink({
@@ -56,14 +38,14 @@ export default function App(props) {
               name
             }
           }
-        },
+        }
 
-        me{
+        me {
           firstName
           lastName
           email
           id
-          queue{
+          queue {
             id
             name
             imageUrl
@@ -76,14 +58,8 @@ export default function App(props) {
           }
         }
       }
-
-
-
-
     `
   });
-
-  client.query({})
 
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 

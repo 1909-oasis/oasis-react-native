@@ -38,28 +38,6 @@ const cards2 = [
 
 //Schema for apollo client
 
-const QUEUE_QUERY = gql`
-query {
-  me{
-    firstName
-    lastName
-    email
-    id
-    queue{
-      id
-      name
-      imageUrl
-      ingredients {
-        ingredient {
-          id
-          name
-        }
-      }
-    }
-  }
-}
-`
-
 const query = gql`
   query {
     cocktailStarter(starterPack: true) {
@@ -73,9 +51,8 @@ const query = gql`
         }
       }
     }
-  }`
-;
-
+  }
+`;
 //component to make a call to DB through apollo client and load up to
 
 class StarterPack extends React.Component {
@@ -88,6 +65,7 @@ class StarterPack extends React.Component {
           }
 
           if (response) {
+            console.log("are we hitting this");
             return response.data.cocktailStarter.map((element, idx) => {
               cards.push(element);
             });
@@ -97,7 +75,6 @@ class StarterPack extends React.Component {
     );
   }
 }
-
 class Card extends React.Component {
   constructor(props) {
     super(props);
@@ -197,24 +174,24 @@ export default class App extends React.Component {
   }
 
   render() {
-    if(!this.state.cards.length){
-      return (
-        <Query query={QUEUE_QUERY}>
-          {({loading, error, data}) => {
-             if(loading) return <Text>Loading Profile!</Text>
-             if(error) return <Text>Whoops! Something went wrong.</Text>
-            console.log('inside query tag, data:', data)
-          const cocktailCards = data.dan.queue.map((cocktail) => ({
-            name: cocktail.name,
-            image: cocktail.imageUrl
-          }))
-          this.setState({
-            cards: cocktailCards
-          })
-          }}
-        </Query>
-      )
-    }
+    // if (!this.state.cards.length) {
+    //   return (
+    //     <Query query={QUEUE_QUERY}>
+    //       {({ loading, error, data }) => {
+    //         if (loading) return <Text>Loading Profile!</Text>;
+    //         if (error) return <Text>Whoops! Something went wrong.</Text>;
+    //         console.log("inside query tag, data:", data);
+    //         const cocktailCards = data.dan.queue.map(cocktail => ({
+    //           name: cocktail.name,
+    //           image: cocktail.imageUrl
+    //         }));
+    //         this.setState({
+    //           cards: cocktailCards
+    //         });
+    //       }}
+    //     </Query>
+    //   );
+    // }
     return (
       <View>
         <StarterPack />
@@ -236,8 +213,6 @@ export default class App extends React.Component {
     );
   }
 }
-
-
 
 const styles = StyleSheet.create({
   card: {
