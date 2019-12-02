@@ -1,6 +1,31 @@
 import React from "react";
 import { AsyncStorage, View } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
+import gql from "graphql-tag";
+import { Mutation } from "react-apollo";
+import { USER_TOKEN } from "./AuthLoadingScreen";
+
+const SIGNUP_MUTATION = gql`
+  mutation SignupMutation(
+    $firstName: String!
+    $lastName: String!
+    $email: String!
+    $password: String!
+  ) {
+    signup(
+      firstName: $firstName
+      lastName: $lastName
+      email: $email
+      password: $password
+    ) {
+      user {
+        id
+        email
+      }
+      token
+    }
+  }
+`;
 
 export default class SignUp extends React.Component {
   constructor(props) {
@@ -79,13 +104,19 @@ export default class SignUp extends React.Component {
             secureTextEntry={true}
             returnKeyType="done"
           />
-          <Button
-            buttonStyle={{ marginTop: 20 }}
-            title="Sign Up"
-            onPress={() => {
-              this.props.navigation.navigate("Main");
-            }}
-          />
+          <Mutation
+            mutation={SIGNUP_MUTATION}
+            variables={{ firstName, lastName, email, password }}
+            onCompleted={data => this._confirm(data)}
+          >
+            {mutation => (
+              <Button
+                buttonStyle={{ marginTop: 20 }}
+                title="Sign Up"
+                onPress={mutation}
+              />
+            )}
+          </Mutation>
           <Button
             type="clear"
             textStyle={{ color: "#bcbec1" }}
@@ -99,3 +130,17 @@ export default class SignUp extends React.Component {
     );
   }
 }
+
+_confirm = async data => {
+  const { token } = data.auth;
+  this.saveUserData(token);
+};
+
+_saveUserData = async token => {
+  try {
+    await AsyncStorage.setItem(USER_TOKEN, token);
+    this.props.navigation.navigate("Main");
+  } catch (error) {
+    console.error(error);
+  }
+};

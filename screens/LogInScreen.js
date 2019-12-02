@@ -2,6 +2,18 @@ import React from "react";
 import { AsyncStorage, View } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 
+const LOGIN_MUTATION = gql`
+  mutation LoginMutation($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      user {
+        id
+        email
+      }
+      token
+    }
+  }
+`;
+
 export default class LogIn extends React.Component {
   constructor(props) {
     super(props);
@@ -10,17 +22,6 @@ export default class LogIn extends React.Component {
       password: ""
     };
   }
-
-  // handleSubmit(event) {
-  //   event.preventDefault();
-  //   this._signInAsync(this.state.email, this.state.password);
-  //   this.setState({
-  //     firstName: "",
-  //     lastName: "",
-  //     email: "",
-  //     password: ""
-  //   });
-  // }
 
   static navigationOptions = {
     title: "Log In"
@@ -63,11 +64,19 @@ export default class LogIn extends React.Component {
             secureTextEntry={true}
             returnKeyType="done"
           />
-          <Button
-            buttonStyle={{ marginTop: 20 }}
-            title="Log In"
-            onPress={this.handleSubmit}
-          />
+          <Mutation
+            mutation={LOGIN_MUTATION}
+            variables={{ email, password }}
+            onCompleted={data => this._confirm(data)}
+          >
+            {mutation => (
+              <Button
+                buttonStyle={{ marginTop: 20 }}
+                title="Log In"
+                onPress={mutation}
+              />
+            )}
+          </Mutation>
           <Button
             type="clear"
             textStyle={{ color: "bcbec1" }}
@@ -78,10 +87,18 @@ export default class LogIn extends React.Component {
       </View>
     );
   }
-  // This is dummy information that lets you get past the log in screen for now.
-  _signInAsync = async (email, password) => {
-    await AsyncStorage.setItem("email", email);
-    await AsyncStorage.setItem("password", password);
-    this.props.navigation.navigate("Main");
-  };
 }
+
+_confirm = async data => {
+  const { token } = data.auth;
+  this.saveUserData(token);
+};
+
+_saveUserData = async token => {
+  try {
+    await AsyncStorage.setItem(USER_TOKEN, token);
+    this.props.navigation.navigate("Main");
+  } catch (error) {
+    console.error(error);
+  }
+};
