@@ -9,7 +9,7 @@ export default function ProfileScreen() {
 
   const QUERY = gql`
   {
-    me {
+    dan {
       firstName
       lastName
       email
@@ -36,14 +36,17 @@ export default function ProfileScreen() {
     <Query query={QUERY}>
       {({loading, error, data}) => {
         if(loading) return <Text>Loading Profile!</Text>
-        if(error) return <Text>Whoops! Something went wrong.</Text>
+        if(error) {
+          console.error(error)
+          return <Text>Whoops! Something went wrong.</Text>
+        }
 
         return (
         <View>
           <Text>It's the profile page!</Text>
-          <Text>First Name: {data.me.firstName}</Text>
-          <Text>Last Name: {data.me.lastName}</Text>
-          <Text>Email: {data.me.email}</Text>
+          <Text>First Name: {data.dan.firstName}</Text>
+          <Text>Last Name: {data.dan.lastName}</Text>
+          <Text>Email: {data.dan.email}</Text>
           {data.recommendationList.map((element) => {
           <Text key={element.cocktail.id}>{element.cocktail.name}</Text>
           })}

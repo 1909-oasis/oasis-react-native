@@ -2,8 +2,21 @@
 
 import React from 'react'
 import {StyleSheet, Text, View, Image} from 'react-native'
-
 import SwipeCards from 'react-native-swipe-cards'
+import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
+
+const QUEUE_QUERY = gql`
+{
+  dan {
+    queue{
+      name
+      imageUrl
+    }
+  }
+}
+`
+
 
 class Card extends React.Component {
   constructor(props) {
@@ -34,35 +47,15 @@ class NoMoreCards extends React.Component {
   }
 }
 
-const cards = [
-  {name: '1', image: 'https://media.giphy.com/media/GfXFVHUzjlbOg/giphy.gif'},
-  {name: '2', image: 'https://media.giphy.com/media/irTuv1L1T34TC/giphy.gif'},
-  {name: '3', image: 'https://media.giphy.com/media/LkLL0HJerdXMI/giphy.gif'},
-  {name: '4', image: 'https://media.giphy.com/media/fFBmUMzFL5zRS/giphy.gif'},
-  {name: '5', image: 'https://media.giphy.com/media/oDLDbBgf0dkis/giphy.gif'},
-  {name: '6', image: 'https://media.giphy.com/media/7r4g8V2UkBUcw/giphy.gif'},
-  {name: '7', image: 'https://media.giphy.com/media/K6Q7ZCdLy8pCE/giphy.gif'},
-  {name: '8', image: 'https://media.giphy.com/media/hEwST9KM0UGti/giphy.gif'},
-  {
-    name: '9',
-    image: 'https://media.giphy.com/media/3oEduJbDtIuA2VrtS0/giphy.gif'
-  }
-]
-
-const cards2 = [
-  {name: '10', image: 'https://media.giphy.com/media/12b3E4U9aSndxC/giphy.gif'},
-  {name: '11', image: 'https://media4.giphy.com/media/6csVEPEmHWhWg/200.gif'},
-  {name: '12', image: 'https://media4.giphy.com/media/AA69fOAMCPa4o/200.gif'},
-  {name: '13', image: 'https://media.giphy.com/media/OVHFny0I7njuU/giphy.gif'}
-]
 
 export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      cards: cards,
+      cards: [],
       outOfCards: false
     }
+
   }
 
   handleYup(card) {
@@ -87,6 +80,8 @@ export default class App extends React.Component {
         `There are only ${this.state.cards.length - index - 1} cards left.`
       )
 
+      //TODO add refresh logic here and put the queue on state again
+
       if (!this.state.outOfCards) {
         console.log(`Adding ${cards2.length} more cards`)
 
@@ -99,6 +94,24 @@ export default class App extends React.Component {
   }
 
   render() {
+    if(!this.state.cards.length){
+      return (
+        <Query query={QUEUE_QUERY}>
+          {({loading, error, data}) => {
+             if(loading) return <Text>Loading Profile!</Text>
+             if(error) return <Text>Whoops! Something went wrong.</Text>
+            console.log('inside query tag, data:', data)
+          const cocktailCards = data.dan.queue.map((cocktail) => ({
+            name: cocktail.name,
+            image: cocktail.imageUrl
+          }))
+          this.setState({
+            cards: cocktailCards
+          })
+          }}
+        </Query>
+      )
+    }
     return (
       <SwipeCards
         cards={this.state.cards}
@@ -117,6 +130,8 @@ export default class App extends React.Component {
     )
   }
 }
+
+
 
 const styles = StyleSheet.create({
   card: {
