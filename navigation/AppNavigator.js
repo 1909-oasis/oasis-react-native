@@ -6,18 +6,13 @@ import {
 
 import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import LogInScreen from "../screens/LogInScreen";
+import SignUpScreen from "../screens/SignUpScreen";
 import MainTabNavigator from "./MainTabNavigator";
-import HomeScreen from "../screens/HomeScreen";
-import LinksScreen from "../screens/LinksScreen";
-import SettingsScreen from "../screens/SettingsScreen";
 
-// const AppStack = createStackNavigator({
-//   Home: HomeScreen,
-//   Links: LinksScreen,
-//   Settings: SettingsScreen
-// Main: MainTabNavigator
-// });
-const AuthStack = createStackNavigator({ LogIn: LogInScreen });
+const AuthStack = createStackNavigator({
+  LogIn: LogInScreen,
+  SignUp: SignUpScreen
+});
 
 export default createAppContainer(
   // SwitchNavigator allows for only one screen to be viewed at a time.
@@ -27,7 +22,6 @@ export default createAppContainer(
       // Read more at https://reactnavigation.org/docs/en/auth-flow.html
       AuthLoading: AuthLoadingScreen,
       Auth: AuthStack,
-      // App: AppStack,
       Main: MainTabNavigator
     },
     {

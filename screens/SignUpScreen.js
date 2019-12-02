@@ -2,28 +2,19 @@ import React from "react";
 import { AsyncStorage, View } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 
-export default class LogIn extends React.Component {
+export default class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      firstName: "",
+      lastName: "",
       email: "",
       password: ""
     };
   }
 
-  // handleSubmit(event) {
-  //   event.preventDefault();
-  //   this._signInAsync(this.state.email, this.state.password);
-  //   this.setState({
-  //     firstName: "",
-  //     lastName: "",
-  //     email: "",
-  //     password: ""
-  //   });
-  // }
-
   static navigationOptions = {
-    title: "Log In"
+    title: "Sign Up"
   };
 
   render() {
@@ -37,6 +28,30 @@ export default class LogIn extends React.Component {
         }}
       >
         <Card>
+          <Input
+            inputContainerStyle={{
+              height: 40,
+              width: 300,
+              borderBottomWidth: 1,
+              borderBottomColor: "#000000"
+            }}
+            label="First Name"
+            placeholder="First Name"
+            onChangeText={text => this.setState({ firstName: text })}
+            returnKeyType="next"
+          />
+          <Input
+            inputContainerStyle={{
+              height: 40,
+              width: 300,
+              borderBottomWidth: 1,
+              borderBottomColor: "#000000"
+            }}
+            label="Last Name"
+            placeholder="Last Name"
+            onChangeText={text => this.setState({ lastName: text })}
+            returnKeyType="next"
+          />
           <Input
             inputContainerStyle={{
               height: 40,
@@ -59,29 +74,25 @@ export default class LogIn extends React.Component {
             label="Password"
             placeholder="Password"
             onChangeText={text => this.setState({ password: text })}
-            // This secures user input for a field.
+            //   This secures user input for a field.
             secureTextEntry={true}
             returnKeyType="done"
           />
           <Button
             buttonStyle={{ marginTop: 20 }}
-            title="Log In"
+            title="Sign Up"
             onPress={this.handleSubmit}
           />
           <Button
             type="clear"
-            textStyle={{ color: "bcbec1" }}
-            title="Sign Up"
-            onPress={() => this.props.navigation.navigate("SignUp")}
+            textStyle={{ color: "#bcbec1" }}
+            title="Log In"
+            onPress={() => {
+              this.props.navigation.navigate("LogIn");
+            }}
           />
         </Card>
       </View>
     );
   }
-  // This is dummy information that lets you get past the log in screen for now.
-  _signInAsync = async (email, password) => {
-    await AsyncStorage.setItem("email", email);
-    await AsyncStorage.setItem("password", password);
-    this.props.navigation.navigate("Main");
-  };
 }
