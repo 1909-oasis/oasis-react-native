@@ -15,9 +15,6 @@ import gql from "graphql-tag";
 
 import AppNavigator from "./navigation/AppNavigator";
 
-
-
-
 export default function App(props) {
   //Apollo Client
   const httpLink = createHttpLink({
@@ -41,14 +38,14 @@ export default function App(props) {
               name
             }
           }
-        },
+        }
 
-        me{
+        me {
           firstName
           lastName
           email
           id
-          queue{
+          queue {
             id
             name
             imageUrl
@@ -61,10 +58,6 @@ export default function App(props) {
           }
         }
       }
-
-
-
-
     `
   });
 
@@ -84,7 +77,7 @@ export default function App(props) {
       <ApolloProvider client={client}>
         <View style={styles.container}>
           {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-          <AppNavigator client={client}/>
+          <AppNavigator client={client} />
         </View>
       </ApolloProvider>
     );

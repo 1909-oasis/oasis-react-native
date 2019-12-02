@@ -15,97 +15,71 @@ import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
 
-//Data cards
-const cards = [];
-const cards2 = [
-  {
-    name: "10",
-    image: "https://media.giphy.com/media/12b3E4U9aSndxC/giphy.gif"
-  },
-  {
-    name: "11",
-    imageUrl: "https://media4.giphy.com/media/6csVEPEmHWhWg/200.gif"
-  },
-  {
-    name: "12",
-    imageUrl: "https://media4.giphy.com/media/AA69fOAMCPa4o/200.gif"
-  },
-  {
-    name: "13",
-    imageUrl: "https://media.giphy.com/media/OVHFny0I7njuU/giphy.gif"
-  }
-];
-
-//Schema for apollo client
-
 const QUEUE_QUERY = gql`
-query {
-  dan{
-    firstName
-    lastName
-    email
-    id
-    queue{
+  query {
+    dan {
+      firstName
+      lastName
+      email
       id
-      name
-      imageUrl
-      ingredients {
-        ingredient {
-          id
-          name
+      queue {
+        id
+        name
+        imageUrl
+        ingredients {
+          ingredient {
+            id
+            name
+          }
         }
       }
     }
   }
-}
-`
+`;
 
-const query = gql`
-  query {
-    cocktailStarter(starterPack: true) {
-      id
-      name
-      imageUrl
-      ingredients {
-        ingredient {
-          id
-          name
-        }
-      }
-    }
-  }`
-;
-
+// const query = gql`
+//   query {
+//     cocktailStarter(starterPack: true) {
+//       id
+//       name
+//       imageUrl
+//       ingredients {
+//         ingredient {
+//           id
+//           name
+//         }
+//       }
+//     }
+//   }
+// `;
 //component to make a call to DB through apollo client and load up to
 
-class StarterPack extends React.Component {
-  render() {
-    return (
-      <Query query={query}>
-        {(response, error) => {
-          if (error) {
-            return <Text>{error}</Text>;
-          }
+// class StarterPack extends React.Component {
+//   render() {
+//     return (
+//       <Query query={query}>
+//         {(response, error) => {
+//           if (error) {
+//             return <Text>{error}</Text>;
+//           }
 
-          if (response) {
-            return response.data.cocktailStarter.map((element, idx) => {
-              cards.push(element);
-            });
-          }
-        }}
-      </Query>
-    );
-  }
-}
-
+//           if (response) {
+//             console.log("are we hitting this");
+//             return response.data.cocktailStarter.map((element, idx) => {
+//               cards.push(element);
+//             });
+//           }
+//         }}
+//       </Query>
+//     );
+//   }
+// }
 class Card extends React.Component {
   constructor(props) {
     super(props);
-
   }
 
   render() {
-    console.dir('lookin at props! ', this.props)
     return (
       <View style={styles.card}>
         <View>
@@ -161,14 +135,12 @@ export default class App extends React.Component {
       cards: [],
       outOfCards: false
     };
-    this.handleQueryComplete = this.handleQueryComplete.bind(this)
-    console.log('in constructor, this.props:, ', props)
+    this.handleQueryComplete = this.handleQueryComplete.bind(this);
+    console.log("in constructor, this.props:, ", props);
   }
 
-  componentDidMount(){
-
-
-    return
+  componentDidMount() {
+    return;
   }
 
   handleYup(card) {
@@ -209,39 +181,40 @@ export default class App extends React.Component {
   handleQueryComplete = cocktails => {
     this.setState({
       cards: cocktails
-    })
-  }
+    });
+  };
 
   render() {
-
-    if(!this.state.cards.length){
-    return (
-      <Query query={QUEUE_QUERY}>
-      {({loading, error, data}) => {
-         if(loading) return <Text>Loading Profile!</Text>
-         if(error) return <Text>Whoops! Something went wrong.</Text>
-          const cocktailCards = data.dan.queue
-          this.handleQueryComplete(cocktailCards)
-        return <View>
-        {/* <StarterPack /> */}
-        <SwipeCards
-          cards={this.state.cards}
-          loop={false}
-          renderCard={cardData => <Card {...cardData} />}
-          renderNoMoreCards={() => <NoMoreCards />}
-          showYup={true}
-          showNope={true}
-          showMaybe={true}
-          hasMaybeAction={true}
-          handleYup={this.handleYup}
-          handleNope={this.handleNope}
-          handleMaybe={this.handleMaybe}
-          cardRemoved={this.cardRemoved.bind(this)}
-        />
-        </View>
-      }}
-    </Query>
-    );
+    if (!this.state.cards.length) {
+      return (
+        <Query query={QUEUE_QUERY}>
+          {({ loading, error, data }) => {
+            if (loading) return <Text>Loading Profile!</Text>;
+            if (error) return <Text>Whoops! Something went wrong.</Text>;
+            const cocktailCards = data.dan.queue;
+            this.handleQueryComplete(cocktailCards);
+            return (
+              <View>
+                {/* <StarterPack /> */}
+                <SwipeCards
+                  cards={this.state.cards}
+                  loop={false}
+                  renderCard={cardData => <Card {...cardData} />}
+                  renderNoMoreCards={() => <NoMoreCards />}
+                  showYup={true}
+                  showNope={true}
+                  showMaybe={true}
+                  hasMaybeAction={true}
+                  handleYup={this.handleYup}
+                  handleNope={this.handleNope}
+                  handleMaybe={this.handleMaybe}
+                  cardRemoved={this.cardRemoved.bind(this)}
+                />
+              </View>
+            );
+          }}
+        </Query>
+      );
     }
     return (
       <View>
@@ -260,12 +233,10 @@ export default class App extends React.Component {
           handleMaybe={this.handleMaybe}
           cardRemoved={this.cardRemoved.bind(this)}
         />
-        </View>
-    )
+      </View>
+    );
   }
 }
-
-
 
 const styles = StyleSheet.create({
   card: {

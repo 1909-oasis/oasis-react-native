@@ -1,18 +1,16 @@
-import React from 'react';
-import { View, Text} from 'react-native'
-import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
-
-
+import React from "react";
+import { View, Text } from "react-native";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 
 export default function ProfileScreen() {
-
   const QUERY = gql`
-  {
-    dan {
-      firstName
-      lastName
-      email
+    {
+      dan {
+        firstName
+        lastName
+        email
+      }
     }
 
     recommendationList {
@@ -34,11 +32,11 @@ export default function ProfileScreen() {
   return(
 
     <Query query={QUERY}>
-      {({loading, error, data}) => {
-        if(loading) return <Text>Loading Profile!</Text>
-        if(error) {
-          console.error(error)
-          return <Text>Whoops! Something went wrong.</Text>
+      {({ loading, error, data }) => {
+        if (loading) return <Text>Loading Profile!</Text>;
+        if (error) {
+          console.error(error);
+          return <Text>Whoops! Something went wrong.</Text>;
         }
 
         return (
@@ -53,12 +51,10 @@ export default function ProfileScreen() {
       </View>
         )
       }}
-
     </Query>
-
-  )
+  );
 }
 
 ProfileScreen.navigationOptions = {
-  title: 'Profile',
+  title: "Profile"
 };
