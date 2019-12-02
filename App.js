@@ -42,11 +42,6 @@ export default function App(props) {
       }
     `
   });
-  //   .then(response =>
-  //     response.data.cocktails.map(element => {
-  //       console.log(element.id);
-  //     })
-  //   );
 
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
@@ -60,6 +55,7 @@ export default function App(props) {
     );
   } else {
     return (
+      //Passing apollo client to components/screens/navigation
       <ApolloProvider client={client}>
         <View style={styles.container}>
           {Platform.OS === "ios" && <StatusBar barStyle="default" />}
