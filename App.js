@@ -18,7 +18,7 @@ import AppNavigator from "./navigation/AppNavigator";
 export default function App(props) {
   //Apollo Client
   const httpLink = createHttpLink({
-    uri: "https://oasis-1909-804e350939.herokuapp.com/oasis-server-v3/dev"
+    uri: "http://localhost:4000/"
   });
   const client = new ApolloClient({
     link: httpLink,
@@ -28,8 +28,16 @@ export default function App(props) {
   client.query({
     query: gql`
       {
-        cocktails {
+        cocktailStarter(starterPack: true) {
           id
+          name
+          imageUrl
+          ingredients {
+            ingredient {
+              id
+              name
+            }
+          }
         }
       }
     `

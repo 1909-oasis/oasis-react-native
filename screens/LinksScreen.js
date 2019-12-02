@@ -1,5 +1,12 @@
 import React from "react";
-import { ScrollView, StyleSheet, FlatList, Text } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  FlatList,
+  Text,
+  Image,
+  View
+} from "react-native";
 import { ExpoLinksView } from "@expo/samples";
 import SwipeCards from "./SwiperCard.js";
 import gql from "graphql-tag";
@@ -8,76 +15,55 @@ import { Query } from "react-apollo";
 // import Icon, {drink} from 'react-native-vector-icons/Ionicons'
 
 export default function LinksScreen() {
-  // console.log(JSON.stringify(gql));
-  // const GET_COCKTAILS = gql`
-  //   {
-  //     cocktails {
+  // const query = gql`
+  //   query {
+  //     cocktailStarter(starterPack: true) {
   //       id
+  //       name
+  //       imageUrl
+  //       ingredients {
+  //         ingredient {
+  //           id
+  //           name
+  //         }
+  //       }
   //     }
   //   }
   // `;
 
-  // const collection = () => {
-  //   <Query query={GET_COCKTAILS}>
-  //     {({ loading, error, data }) => {
-  //       console.log(loading, error, data);
-  //       if (loading) {
-  //         console.log(loading);
-  //       }
-  //       return "HI";
-  //     }}
-  //   </Query>;
-  // };
-  // console.log(collection());
-
-  // <Query client={}></Query>;
-  // query({
-  //   query: gql`
-  //     {
-  //       cocktails {
-  //         id
-  //       }
-  //     }
-  //   `
-  // }).then(response =>
-  //   response.data.cocktails.map(element => {
-  //     console.log(element.id);
-  //   })
-  // );
-  // console.log(Query);
-
-  const query = gql`
-    query {
-      cocktails {
-        id
-      }
-    }
-  `;
-
   return (
-    <ScrollView>
-      <Query query={query}>
-        {(response, error) => {
-          if (error) {
-            console.log("Response Error ----> ", error);
-            return <Text>{error}</Text>;
-          }
-
-          if (response) {
-            console.log("response-data ----> ");
-            return response.data.cocktails.map(element => {
-              return <Text key={element.id}>{element.id}</Text>;
-            });
-
-            // response.data.cocktails.map(element => {
-            //   console.log("this is element", element);
-            //   return <FlatList element />;
-            // });
-          }
-        }}
-      </Query>
+    <ScrollView style={styles.container}>
+      <SwipeCards />
     </ScrollView>
   );
+
+  //   <View style={styles.container}>
+  //     {/* <Query query={query}>
+  //       {(response, error) => {
+  //         if (error) {
+  //           console.log("Response Error ----> ", error);
+  //           return <Text>{error}</Text>;
+  //         }
+
+  //         if (response) {
+  //           // console.log("response-data ----> ", response.data);
+  //           return response.data.cocktailStarter.map((element, idx) => {
+  //             return (
+  //               <View key={idx}>
+  //                 <Text>{element.name}</Text>
+  //                 <Image
+  //                   style={{ width: 66, height: 58 }}
+  //                   source={{ uri: `${element.imageUrl}` }}
+  //                 />
+  //               </View>
+  //             );
+  //           });
+  //         }
+  //       }}
+  //     </Query> */}
+
+  //   </ScrollView>
+  // );
 }
 
 LinksScreen.navigationOptions = {
