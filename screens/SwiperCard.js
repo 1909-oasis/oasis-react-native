@@ -40,7 +40,7 @@ const cards2 = [
 
 const QUEUE_QUERY = gql`
 query {
-  me{
+  dan{
     firstName
     lastName
     email
@@ -101,9 +101,11 @@ class StarterPack extends React.Component {
 class Card extends React.Component {
   constructor(props) {
     super(props);
+
   }
 
   render() {
+    console.dir('lookin at props! ', this.props)
     return (
       <View style={styles.card}>
         <View>
@@ -159,6 +161,14 @@ export default class App extends React.Component {
       cards: [],
       outOfCards: false
     };
+    this.handleQueryComplete = this.handleQueryComplete.bind(this)
+    console.log('in constructor, this.props:, ', props)
+  }
+
+  componentDidMount(){
+
+
+    return
   }
 
   handleYup(card) {
@@ -196,28 +206,25 @@ export default class App extends React.Component {
     }
   }
 
+  handleQueryComplete = cocktails => {
+    this.setState({
+      cards: cocktails
+    })
+  }
+
   render() {
+
     if(!this.state.cards.length){
-      return (
-        <Query query={QUEUE_QUERY}>
-          {({loading, error, data}) => {
-             if(loading) return <Text>Loading Profile!</Text>
-             if(error) return <Text>Whoops! Something went wrong.</Text>
-            console.log('inside query tag, data:', data)
-          const cocktailCards = data.dan.queue.map((cocktail) => ({
-            name: cocktail.name,
-            image: cocktail.imageUrl
-          }))
-          this.setState({
-            cards: cocktailCards
-          })
-          }}
-        </Query>
-      )
-    }
     return (
-      <View>
-        <StarterPack />
+
+      <Query query={QUEUE_QUERY}>
+      {({loading, error, data}) => {
+         if(loading) return <Text>Loading Profile!</Text>
+         if(error) return <Text>Whoops! Something went wrong.</Text>
+          const cocktailCards = data.dan.queue
+          this.handleQueryComplete(cocktailCards)
+        return <View>
+        {/* <StarterPack /> */}
         <SwipeCards
           cards={this.state.cards}
           loop={false}
@@ -232,8 +239,30 @@ export default class App extends React.Component {
           handleMaybe={this.handleMaybe}
           cardRemoved={this.cardRemoved.bind(this)}
         />
-      </View>
+        </View>
+      }}
+    </Query>
     );
+    }
+    return (
+      <View>
+        {/* <StarterPack /> */}
+        <SwipeCards
+          cards={this.state.cards}
+          loop={false}
+          renderCard={cardData => <Card {...cardData} />}
+          renderNoMoreCards={() => <NoMoreCards />}
+          showYup={true}
+          showNope={true}
+          showMaybe={true}
+          hasMaybeAction={true}
+          handleYup={this.handleYup}
+          handleNope={this.handleNope}
+          handleMaybe={this.handleMaybe}
+          cardRemoved={this.cardRemoved.bind(this)}
+        />
+        </View>
+    )
   }
 }
 
