@@ -77,7 +77,7 @@ export default function App(props) {
       <ApolloProvider client={client}>
         <View style={styles.container}>
           {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <AppNavigator client={client} />
         </View>
       </ApolloProvider>
     );
