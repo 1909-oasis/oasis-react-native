@@ -5,21 +5,35 @@ import gql from 'graphql-tag'
 
 
 
-export default function SettingsScreen() {
+export default function ProfileScreen() {
 
-  const ME_QUERY = gql`
+  const QUERY = gql`
   {
     me {
       firstName
       lastName
       email
     }
+
+    recommendationList {
+      cocktail {
+        id
+        imageUrl
+        name
+        ingredients{
+          ingredient{
+            name
+          }
+          measure
+        }
+        id
+      }
+    }
   }
 `
-
   return(
 
-    <Query query={ME_QUERY}>
+    <Query query={QUERY}>
       {({loading, error, data}) => {
         if(loading) return <Text>Loading Profile!</Text>
         if(error) return <Text>Whoops! Something went wrong.</Text>
@@ -27,9 +41,12 @@ export default function SettingsScreen() {
         return (
         <View>
           <Text>It's the profile page!</Text>
-          <Text>First Name: {data.firstName}</Text>
-          <Text>Last Name: {data.lastName}</Text>
-          <Text>Email: {data.email}</Text>
+          <Text>First Name: {data.me.firstName}</Text>
+          <Text>Last Name: {data.me.lastName}</Text>
+          <Text>Email: {data.me.email}</Text>
+          {data.recommendationList.map((recCocktail) => {
+          <Text key={recCocktail.id}>recCocktail.name</Text>
+          })}
       </View>
         )
       }}
@@ -39,6 +56,6 @@ export default function SettingsScreen() {
   )
 }
 
-SettingsScreen.navigationOptions = {
+ProfileScreen.navigationOptions = {
   title: 'Profile',
 };
