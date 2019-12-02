@@ -14,6 +14,21 @@ export default function ProfileScreen() {
       lastName
       email
     }
+
+    recommendationList {
+      cocktail {
+        id
+        imageUrl
+        name
+        ingredients{
+          ingredient{
+            name
+          }
+          measure
+        }
+        id
+      }
+    }
   }
 `
   return(
@@ -32,9 +47,9 @@ export default function ProfileScreen() {
           <Text>First Name: {data.dan.firstName}</Text>
           <Text>Last Name: {data.dan.lastName}</Text>
           <Text>Email: {data.dan.email}</Text>
-          {/* {data.recommendationList.map((element) => {
+          {data.recommendationList.map((element) => {
           <Text key={element.cocktail.id}>{element.cocktail.name}</Text>
-          })} */}
+          })}
       </View>
         )
       }}

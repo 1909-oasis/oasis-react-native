@@ -216,7 +216,6 @@ export default class App extends React.Component {
 
     if(!this.state.cards.length){
     return (
-
       <Query query={QUEUE_QUERY}>
       {({loading, error, data}) => {
          if(loading) return <Text>Loading Profile!</Text>
