@@ -2,17 +2,17 @@ import React from "react";
 import { AsyncStorage, View } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 
-const LOGIN_MUTATION = gql`
-  mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      user {
-        id
-        email
-      }
-      token
-    }
-  }
-`;
+// const LOGIN_MUTATION = gql`
+//   mutation LoginMutation($email: String!, $password: String!) {
+//     login(email: $email, password: $password) {
+//       user {
+//         id
+//         email
+//       }
+//       token
+//     }
+//   }
+// `;
 
 export default class LogIn extends React.Component {
   constructor(props) {
@@ -64,19 +64,20 @@ export default class LogIn extends React.Component {
             secureTextEntry={true}
             returnKeyType="done"
           />
-          <Mutation
+          {/* <Mutation
             mutation={LOGIN_MUTATION}
             variables={{ email, password }}
             onCompleted={data => this._confirm(data)}
           >
-            {mutation => (
-              <Button
-                buttonStyle={{ marginTop: 20 }}
-                title="Log In"
-                onPress={mutation}
-              />
-            )}
-          </Mutation>
+            {mutation => ( */}
+          <Button
+            buttonStyle={{ marginTop: 20 }}
+            title="Log In"
+            // onPress={mutation}
+            onPress={() => this.props.navigation.navigate("Main")}
+          />
+          {/* )}
+          </Mutation> */}
           <Button
             type="clear"
             textStyle={{ color: "bcbec1" }}
