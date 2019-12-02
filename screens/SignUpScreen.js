@@ -18,6 +18,7 @@ export default class SignUp extends React.Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <View
         style={{
@@ -81,7 +82,9 @@ export default class SignUp extends React.Component {
           <Button
             buttonStyle={{ marginTop: 20 }}
             title="Sign Up"
-            onPress={this.handleSubmit}
+            onPress={() => {
+              this.props.navigation.navigate("Main");
+            }}
           />
           <Button
             type="clear"

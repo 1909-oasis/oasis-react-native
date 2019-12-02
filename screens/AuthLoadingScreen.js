@@ -13,24 +13,38 @@ export const onSignIn = () => AsyncStorage.setItem(USER_TOKEN, "true");
 
 export const onSignOut = () => AsyncStorage.removeItem(USER_TOKEN);
 
+// export const isSignedIn = async () => {
+//   try {
+//     let res = await AsyncStorage.getItem(USER_TOKEN);
+//     if (res !== null) {
+//       //   this.props.navigation.navigate("Main");
+//       return true;
+//     } else {
+//       //   this.props.navigation.navigate("Auth");
+//       //   console.log("this is res", res);
+//       return false;
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
 export const isSignedIn = () => {
-  return async (resolve, reject) => {
-    const res = await AsyncStorage.getItem(USER_TOKEN);
-    try {
-      if (res !== null) {
-        this.props.navigation.navigate("Main");
-        resolve(true);
-      } else {
-        this.props.navigation.navigate("Auth");
-        resolve(false);
-      }
-    } catch (error) {
-      reject(error);
-    }
-  };
+  return new Promise((resolve, reject) => {
+    AsyncStorage.getItem(USER_TOKEN)
+      .then(res => {
+        if (res !== null) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+      .catch(err => reject(err));
+  });
 };
 
 class AuthLoadingScreen extends React.Component {
+  __isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -38,14 +52,23 @@ class AuthLoadingScreen extends React.Component {
       checkedSignIn: false
     };
   }
+  //   async componentDidMount() {
+  //     // this._bootstrapAsync()
+  //     try {
+  //       await isSignedIn();
+  //       return this.setState({ signedIn: res, checkedSignIn: true });
+  //     } catch (error) {
+  //       alert("An error has occured");
+  //     }
+
   componentDidMount() {
-    // this._bootstrapAsync();
-    isSignedIn();
-    try {
-      async res => await this.setState({ signedIn: res, checkedSignIn: true });
-    } catch (error) {
-      alert("An error has occured");
-    }
+    this.__isMounted = true;
+    isSignedIn().then(res => {
+      if (this.__isMounted) {
+        this.setState({ signedIn: res, checkedSignIn: true });
+      }
+    });
+    //   .catch(err => alert("An error occurred"));
     //   }
 
     // Fetch the token from storage then navigate to our appropriate place
@@ -56,6 +79,10 @@ class AuthLoadingScreen extends React.Component {
     // This will switch to the Main screen or the Auth screen and this loading screen will be unmounted and thrown away.
     // Commented out the first part of the ternary
     this.props.navigation.navigate(this.state.signedIn ? "Main" : "Auth");
+  }
+
+  componentWillUnmount() {
+    this.__isMounted = false;
   }
 
   render() {
