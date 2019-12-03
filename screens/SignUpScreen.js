@@ -40,7 +40,27 @@ export default class SignUp extends React.Component {
       email: "",
       password: "",
     };
+    this._confirm = this._confirm.bind(this);
+    this._saveUserData = this._saveUserData.bind(this);
   }
+
+  _confirm = async data => {
+    try {
+      const { token } = data.signup.token;
+      this._saveUserData(token);
+      this.props.navigation.navigate("Main");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  _saveUserData = async token => {
+    try {
+      await AsyncStorage.setItem(USER_TOKEN, token);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   static navigationOptions = {
     title: "Sign Up",
@@ -116,20 +136,20 @@ export default class SignUp extends React.Component {
               secureTextEntry={true}
               returnKeyType="done"
             />
-            {/* <Mutation
-            mutation={SIGNUP_MUTATION}
-            variables={{ firstName, lastName, email, password }}
-            onCompleted={data => _confirm(data)}
-          >
-            {mutation => ( */}
-            <Button
-              buttonStyle={{ marginTop: 20 }}
-              title="Sign Up"
-              // onPress={mutation}
-              onPress={() => this.props.navigation.navigate("Main")}
-            />
-            {/* )}
-          </Mutation> */}
+            <Mutation
+              mutation={SIGNUP_MUTATION}
+              variables={{ firstName, lastName, email, password }}
+              onCompleted={data => this._confirm(data)}
+            >
+              {mutation => (
+                <Button
+                  buttonStyle={{ marginTop: 20 }}
+                  title="Sign Up"
+                  onPress={mutation}
+                  // onPress={() => this.props.navigation.navigate("Main")}
+                />
+              )}
+            </Mutation>
             <Button
               type="clear"
               textStyle={{ color: "#bcbec1" }}
@@ -144,22 +164,3 @@ export default class SignUp extends React.Component {
     );
   }
 }
-
-_confirm = async data => {
-  try {
-    console.log("this is the data", data);
-    const { token } = data.signup.token;
-    this._saveUserData(token);
-    this.props.navigation.navigate("Main");
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-_saveUserData = async token => {
-  try {
-    await AsyncStorage.setItem(USER_TOKEN, token);
-  } catch (error) {
-    console.error(error);
-  }
-};

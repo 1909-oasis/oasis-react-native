@@ -1,10 +1,9 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { AsyncStorage, View, Text } from "react-native";
 import { Button, Card } from "react-native-elements";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import { thisExpression } from "@babel/types";
-import onSignOut from "./AuthLoadingScreen";
 
 // const QUERY = gql`
 //   {
@@ -29,6 +28,10 @@ const QUERY = gql`
 export default class ProfileScreen extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    onSignOut = async () => await AsyncStorage.removeItem(USER_TOKEN);
   }
 
   static navigationOptions = {
@@ -66,7 +69,7 @@ export default class ProfileScreen extends React.Component {
                   buttonStyle={{ marginTop: 20 }}
                   title="Log Out"
                   onPress={() =>
-                    onSignOut().then(() =>
+                    this.onSignOut().then(() =>
                       this.props.navigation.navigate("LogIn")
                     )
                   }

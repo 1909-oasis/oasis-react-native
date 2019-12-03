@@ -5,7 +5,8 @@ import {
   FlatList,
   Text,
   Image,
-  View
+  ImageBackground,
+  View,
 } from "react-native";
 import { ExpoLinksView } from "@expo/samples";
 import SwipeCards from "./SwiperCard.js";
@@ -67,13 +68,13 @@ export default function LinksScreen() {
 }
 
 LinksScreen.navigationOptions = {
-  title: "Cocktail Swiper"
+  title: "Cocktail Swiper",
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: "#fff"
-  }
+    backgroundColor: "#fff",
+  },
 });
