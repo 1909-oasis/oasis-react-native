@@ -23,7 +23,6 @@ import { setContext } from "apollo-link-context";
 import AppNavigator from "./navigation/AppNavigator";
 import { USER_TOKEN } from "./screens/AuthLoadingScreen";
 
-export default function App(props) {
   // Apollo Client
   const httpLink = createHttpLink({
     uri: "http://oasis1909.herokuapp.com/",
@@ -48,6 +47,14 @@ export default function App(props) {
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
+
+
+export default function App(props) {
+
+
+
+
+
 
   client.query({
     query: gql`

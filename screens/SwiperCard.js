@@ -40,14 +40,24 @@ const QUEUE_QUERY = gql`
 `;
 
 const SWIPE_MUTATION = gql`
-  mutation swipeMutation($cocktailId: String!, $rating: Int!) {
+  mutation Swipe($cocktailId: String!, $rating: Int!) {
     swipe(cocktailId: $cocktailId, rating: $rating){
-      userCocktail{
+
         rating
-      }
+
     }
   }
-`
+  `
+
+// const swipeMutation = (cocktailId, rating) => gql`
+//   mutation
+//     swipe(cocktailId: ${cocktailId}, rating: ${rating}){
+//       userCocktail{
+//         rating
+//       }
+//     }
+
+// `
 
 // const MAYBE_MUTATION = gql`
 //   mutation maybeMutation(){
@@ -162,12 +172,22 @@ export default class App extends React.Component {
   }
 
   //swipe takes cocktailId and rating
-  handleYup(card) {
+  async handleYup(card) {
     const cocktailId = card.id
     const rating = 1
     console.log("in yup");
-    console.log("client: ", client)
-    // return(<Mutation mutation = {SWIPE_MUTATION} variables = {{cocktailId, rating}}>
+    // const mutation = swipeMutation(cocktailId, rating)
+    // console.log(mutation)
+
+    let response = client.mutate({
+      variables: {
+        cocktailId,
+        rating
+      },
+      mutation: SWIPE_MUTATION
+    }
+    )
+    // return(<Mutation mutation = {swipeMutation} variables = {{cocktailId, rating}}>
     //   {(mutation, {data, loading, error}) => {
     //     if(loading){
     //       console.log('loading')
@@ -180,7 +200,7 @@ export default class App extends React.Component {
     //   }
     // </Mutation>)
 
-
+    console.log(response)
 
   }
 
@@ -200,8 +220,7 @@ export default class App extends React.Component {
     if (this.state.cards.length - index <= CARD_REFRESH_LIMIT + 1) {
       console.log(
         `There are only ${this.state.cards.length -
-          index -
-          1} cards left.`
+          index - 1} cards left.`
       );
 
       //TODO add refresh logic here and put the queue on state again
