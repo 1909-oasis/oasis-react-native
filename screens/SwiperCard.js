@@ -179,7 +179,7 @@ export default class App extends React.Component {
     // const mutation = swipeMutation(cocktailId, rating)
     // console.log(mutation)
 
-    let response = client.mutate({
+    let response = await client.mutate({
       variables: {
         cocktailId,
         rating
