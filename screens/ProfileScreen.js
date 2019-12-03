@@ -3,12 +3,22 @@ import { View, Text } from "react-native";
 import { Button, Card } from "react-native-elements";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
-import { AuthStack } from "../navigation/AppNavigator";
 import { thisExpression } from "@babel/types";
+import onSignOut from "./AuthLoadingScreen";
+
+// const QUERY = gql`
+//   {
+//     dan {
+//       firstName
+//       lastName
+//       email
+//     }
+//   }
+// `;
 
 const QUERY = gql`
   {
-    dan {
+    me {
       firstName
       lastName
       email
@@ -34,7 +44,7 @@ export default class ProfileScreen extends React.Component {
             console.error(error);
             return <Text>Whoops! Something went wrong.</Text>;
           }
-
+          console.log(data);
           return (
             <View
               style={{
@@ -46,9 +56,9 @@ export default class ProfileScreen extends React.Component {
             >
               <Card
                 containerStyle={{ width: 350 }}
-                title={`${data.dan.firstName} ${data.dan.lastName}`}
+                title={`${data.me.firstName} ${data.me.lastName}`}
               >
-                <Text>{data.dan.email}</Text>
+                <Text>{data.me.email}</Text>
                 {/* {data.recommendationList.map(element => {
               <Text key={element.cocktail.id}>{element.cocktail.name}</Text>;
             })} */}
@@ -56,7 +66,9 @@ export default class ProfileScreen extends React.Component {
                   buttonStyle={{ marginTop: 20 }}
                   title="Log Out"
                   onPress={() =>
-                    this.props.navigation.navigate("LogIn")
+                    onSignOut().then(() =>
+                      this.props.navigation.navigate("LogIn")
+                    )
                   }
                 />
               </Card>
