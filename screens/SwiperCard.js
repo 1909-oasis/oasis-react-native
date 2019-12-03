@@ -15,6 +15,7 @@ import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
 import { useMutation } from '@apollo/react-hooks';
+import { client } from '../App.js'
 
 const QUEUE_QUERY = gql`
   query {
@@ -158,7 +159,6 @@ export default class App extends React.Component {
       outOfCards: false,
     };
     this.handleQueryComplete = this.handleQueryComplete.bind(this);
-    console.log("in constructor, this.props:, ", props);
   }
 
   //swipe takes cocktailId and rating
@@ -166,19 +166,19 @@ export default class App extends React.Component {
     const cocktailId = card.id
     const rating = 1
     console.log("in yup");
-    return(<Mutation mutation = {SWIPE_MUTATION} variables = {{cocktailId, rating}}>
-      {(mutation, {data, loading, error}) => {
-        if(loading){
-          console.log('loading')
-        }
-        if(error){
-          console.error(error)
-        }
-        console.log('in mutation component')
-      }
-      }
-    </Mutation>)
-
+    console.log("client: ", client)
+    // return(<Mutation mutation = {SWIPE_MUTATION} variables = {{cocktailId, rating}}>
+    //   {(mutation, {data, loading, error}) => {
+    //     if(loading){
+    //       console.log('loading')
+    //     }
+    //     if(error){
+    //       console.error(error)
+    //     }
+    //     console.log('in mutation component')
+    //   }
+    //   }
+    // </Mutation>)
 
 
 
@@ -233,25 +233,7 @@ export default class App extends React.Component {
               return <Text>Whoops! Something went wrong.</Text>;
             const cocktailCards = data.me.queue;
             this.handleQueryComplete(cocktailCards);
-            return (
-              <View>
-                {/* <StarterPack /> */}
-                <SwipeCards
-                  cards={this.state.cards}
-                  loop={false}
-                  renderCard={cardData => <Card {...cardData} />}
-                  renderNoMoreCards={() => <NoMoreCards />}
-                  showYup={true}
-                  showNope={true}
-                  showMaybe={true}
-                  hasMaybeAction={true}
-                  handleYup={this.handleYup}
-                  handleNope={this.handleNope}
-                  handleMaybe={this.handleMaybe}
-                  cardRemoved={this.cardRemoved.bind(this)}
-                />
-              </View>
-            );
+            return <Text>Loading Profile!</Text>
           }}
         </Query>
       );

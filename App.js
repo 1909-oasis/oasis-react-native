@@ -44,7 +44,7 @@ export default function App(props) {
   // Apollo Links allow you to create middlewares that let you modify requests before they are sent to the server.
   // https://github.com/apollographql/apollo-link
   // We return the headers to the context so httpLink can read them.
-  const client = new ApolloClient({
+  export const client = new ApolloClient({
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });
@@ -101,7 +101,7 @@ export default function App(props) {
       <ApolloProvider client={client}>
         <View style={styles.container}>
           {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <AppNavigator/>
         </View>
       </ApolloProvider>
     );
