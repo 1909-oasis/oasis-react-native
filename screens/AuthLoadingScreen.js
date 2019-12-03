@@ -9,10 +9,10 @@ import {
 
 export const USER_TOKEN = "auth-demo-key";
 
-export const onSignIn = () =>
-  AsyncStorage.setItem(USER_TOKEN, "true");
+// export const onSignIn = () =>
+//   AsyncStorage.setItem(USER_TOKEN, "true");
 
-console.log(AsyncStorage.clear());
+// console.log(AsyncStorage.clear());
 
 // export const isSignedIn = async () => {
 //   try {
