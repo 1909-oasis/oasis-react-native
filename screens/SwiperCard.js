@@ -12,9 +12,9 @@ import {
 
 //Apollo client query hooks
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 
 const QUEUE_QUERY = gql`
   query {
@@ -37,6 +37,27 @@ const QUEUE_QUERY = gql`
     }
   }
 `;
+
+const SWIPE_MUTATION = gql`
+  mutation swipeMutation($cocktailId: String!, $rating: Int!) {
+    swipe(cocktailId: $cocktailId, rating: $rating){
+      userCocktail{
+        rating
+      }
+    }
+  }
+`
+
+// const MAYBE_MUTATION = gql`
+//   mutation maybeMutation(){
+//     shiftFromQueue(){
+//       user{
+//         name
+//       }
+//     }
+//   }
+
+// `
 
 // const query = gql`
 //   query {
@@ -140,8 +161,27 @@ export default class App extends React.Component {
     console.log("in constructor, this.props:, ", props);
   }
 
+  //swipe takes cocktailId and rating
   handleYup(card) {
-    console.log("yup");
+    const cocktailId = card.id
+    const rating = 1
+    console.log("in yup");
+    return(<Mutation mutation = {SWIPE_MUTATION} variables = {{cocktailId, rating}}>
+      {(mutation, {data, loading, error}) => {
+        if(loading){
+          console.log('loading')
+        }
+        if(error){
+          console.error(error)
+        }
+        console.log('in mutation component')
+      }
+      }
+    </Mutation>)
+
+
+
+
   }
 
   handleNope(card) {
