@@ -2,7 +2,7 @@ import React from "react";
 import { AsyncStorage, View } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 import gql from "graphql-tag";
-// import { Mutation } from "react-apollo";
+import { Mutation } from "react-apollo";
 import { USER_TOKEN } from "./AuthLoadingScreen";
 
 const SIGNUP_MUTATION = gql`
@@ -34,15 +34,16 @@ export default class SignUp extends React.Component {
       firstName: "",
       lastName: "",
       email: "",
-      password: ""
+      password: "",
     };
   }
 
   static navigationOptions = {
-    title: "Sign Up"
+    title: "Sign Up",
   };
 
   render() {
+    const { firstName, lastName, email, password } = this.state;
     console.log(this.state);
     return (
       <View
@@ -50,7 +51,7 @@ export default class SignUp extends React.Component {
           flex: 1,
           paddingVertical: 20,
           justifyContent: "flex-start",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <Card>
@@ -59,7 +60,7 @@ export default class SignUp extends React.Component {
               height: 40,
               width: 300,
               borderBottomWidth: 1,
-              borderBottomColor: "#000000"
+              borderBottomColor: "#000000",
             }}
             label="First Name"
             placeholder="First Name"
@@ -71,7 +72,7 @@ export default class SignUp extends React.Component {
               height: 40,
               width: 300,
               borderBottomWidth: 1,
-              borderBottomColor: "#000000"
+              borderBottomColor: "#000000",
             }}
             label="Last Name"
             placeholder="Last Name"
@@ -83,7 +84,7 @@ export default class SignUp extends React.Component {
               height: 40,
               width: 300,
               borderBottomWidth: 1,
-              borderBottomColor: "#000000"
+              borderBottomColor: "#000000",
             }}
             label="Email"
             placeholder="Email"
@@ -95,7 +96,7 @@ export default class SignUp extends React.Component {
               height: 40,
               width: 300,
               borderBottomWidth: 1,
-              borderBottomColor: "#000000"
+              borderBottomColor: "#000000",
             }}
             label="Password"
             placeholder="Password"
@@ -104,20 +105,19 @@ export default class SignUp extends React.Component {
             secureTextEntry={true}
             returnKeyType="done"
           />
-          {/* <Mutation
+          <Mutation
             mutation={SIGNUP_MUTATION}
             variables={{ firstName, lastName, email, password }}
-            onCompleted={data => this._confirm(data)}
+            onCompleted={data => _confirm(data)}
           >
-            {mutation => ( */}
-          <Button
-            buttonStyle={{ marginTop: 20 }}
-            title="Sign Up"
-            // onPress={mutation}
-            onPress={() => this.props.navigation.navigate("Main")}
-          />
-          {/* )}
-          </Mutation> */}
+            {mutation => (
+              <Button
+                buttonStyle={{ marginTop: 20 }}
+                title="Sign Up"
+                onPress={mutation}
+              />
+            )}
+          </Mutation>
           <Button
             type="clear"
             textStyle={{ color: "#bcbec1" }}
@@ -133,14 +133,19 @@ export default class SignUp extends React.Component {
 }
 
 _confirm = async data => {
-  const { token } = data.auth;
-  this.saveUserData(token);
+  try {
+    console.log("this is the data", data);
+    const { token } = data.signup.token;
+    await this._saveUserData(token);
+    this.props.navigation.navigate("Main");
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 _saveUserData = async token => {
   try {
     await AsyncStorage.setItem(USER_TOKEN, token);
-    this.props.navigation.navigate("Main");
   } catch (error) {
     console.error(error);
   }
