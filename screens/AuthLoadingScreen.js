@@ -4,14 +4,15 @@ import {
   AsyncStorage,
   StatusBar,
   StyleSheet,
-  View
+  View,
 } from "react-native";
 
 export const USER_TOKEN = "auth-demo-key";
 
-export const onSignIn = () => AsyncStorage.setItem(USER_TOKEN, "true");
+// export const onSignIn = () =>
+//   AsyncStorage.setItem(USER_TOKEN, "true");
 
-export const onSignOut = () => AsyncStorage.removeItem(USER_TOKEN);
+// console.log(AsyncStorage.clear());
 
 // export const isSignedIn = async () => {
 //   try {
@@ -49,7 +50,7 @@ class AuthLoadingScreen extends React.Component {
     super(props);
     this.state = {
       signedIn: false, // Determines if you are sent to Main or to Auth
-      checkedSignIn: false
+      checkedSignIn: false,
     };
   }
   //   async componentDidMount() {
@@ -78,7 +79,9 @@ class AuthLoadingScreen extends React.Component {
 
     // This will switch to the Main screen or the Auth screen and this loading screen will be unmounted and thrown away.
     // Commented out the first part of the ternary
-    this.props.navigation.navigate(this.state.signedIn ? "Main" : "Auth");
+    this.props.navigation.navigate(
+      this.state.signedIn ? "Main" : "Auth"
+    );
   }
 
   componentWillUnmount() {
