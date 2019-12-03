@@ -105,19 +105,20 @@ export default class SignUp extends React.Component {
             secureTextEntry={true}
             returnKeyType="done"
           />
-          <Mutation
+          {/* <Mutation
             mutation={SIGNUP_MUTATION}
             variables={{ firstName, lastName, email, password }}
             onCompleted={data => _confirm(data)}
           >
-            {mutation => (
-              <Button
-                buttonStyle={{ marginTop: 20 }}
-                title="Sign Up"
-                onPress={mutation}
-              />
-            )}
-          </Mutation>
+            {mutation => ( */}
+          <Button
+            buttonStyle={{ marginTop: 20 }}
+            title="Sign Up"
+            // onPress={mutation}
+            onPress={() => this.props.navigation.navigate("Main")}
+          />
+          {/* )}
+          </Mutation> */}
           <Button
             type="clear"
             textStyle={{ color: "#bcbec1" }}
