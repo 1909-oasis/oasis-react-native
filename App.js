@@ -2,7 +2,13 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import React, { useState } from "react";
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  AsyncStorage,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 //this is where apollo starts
@@ -12,17 +18,35 @@ import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
+import { setContext } from "apollo-link-context";
 
 import AppNavigator from "./navigation/AppNavigator";
+import { USER_TOKEN } from "./screens/AuthLoadingScreen";
 
 export default function App(props) {
-  //Apollo Client
+  // Apollo Client
   const httpLink = createHttpLink({
-    uri: "http://oasis1909.herokuapp.com/"
+    uri: "http://oasis1909.herokuapp.com/",
   });
+
+  // This middleware get the authentication token from AsyncStorage if it exists.
+  // This middleware will be invoked every time ApolloClient sends a request to the server (as seen below).
+  const authLink = setContext(async (_, { headers }) => {
+    const token = await AsyncStorage.getItem(USER_TOKEN);
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
+  });
+
+  // Apollo Links allow you to create middlewares that let you modify requests before they are sent to the server.
+  // https://github.com/apollographql/apollo-link
+  // We return the headers to the context so httpLink can read them.
   const client = new ApolloClient({
-    link: httpLink,
-    cache: new InMemoryCache()
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
   });
 
   client.query({
@@ -58,7 +82,7 @@ export default function App(props) {
           }
         }
       }
-    `
+    `,
   });
 
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -88,15 +112,15 @@ async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
       require("./assets/images/robot-dev.png"),
-      require("./assets/images/robot-prod.png")
+      require("./assets/images/robot-prod.png"),
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
       // remove this if you are not using it in your app
-      "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf")
-    })
+      "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
+    }),
   ]);
 }
 
@@ -113,6 +137,6 @@ function handleFinishLoading(setLoadingComplete) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
-  }
+    backgroundColor: "#fff",
+  },
 });

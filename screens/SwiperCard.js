@@ -7,7 +7,7 @@ import {
   View,
   Image,
   ImageBackground,
-  ScrollView
+  ScrollView,
 } from "react-native";
 
 //Apollo client query hooks
@@ -18,7 +18,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 const QUEUE_QUERY = gql`
   query {
-    dan {
+    me {
       firstName
       lastName
       email
@@ -95,7 +95,7 @@ class Card extends React.Component {
               position: "absolute",
               bottom: 0,
               left: 0,
-              fontSize: 50
+              fontSize: 50,
             }}
           >
             {this.props.name}
@@ -134,7 +134,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       cards: [],
-      outOfCards: false
+      outOfCards: false,
     };
     this.handleQueryComplete = this.handleQueryComplete.bind(this);
     console.log("in constructor, this.props:, ", props);
@@ -159,7 +159,9 @@ export default class App extends React.Component {
 
     if (this.state.cards.length - index <= CARD_REFRESH_LIMIT + 1) {
       console.log(
-        `There are only ${this.state.cards.length - index - 1} cards left.`
+        `There are only ${this.state.cards.length -
+          index -
+          1} cards left.`
       );
 
       //TODO add refresh logic here and put the queue on state again
@@ -169,7 +171,7 @@ export default class App extends React.Component {
 
         this.setState({
           cards: this.state.cards.concat(cards2),
-          outOfCards: true
+          outOfCards: true,
         });
       }
     }
@@ -177,7 +179,7 @@ export default class App extends React.Component {
 
   handleQueryComplete = cocktails => {
     this.setState({
-      cards: cocktails
+      cards: cocktails,
     });
   };
 
@@ -187,8 +189,9 @@ export default class App extends React.Component {
         <Query query={QUEUE_QUERY}>
           {({ loading, error, data }) => {
             if (loading) return <Text>Loading Profile!</Text>;
-            if (error) return <Text>Whoops! Something went wrong.</Text>;
-            const cocktailCards = data.dan.queue;
+            if (error)
+              return <Text>Whoops! Something went wrong.</Text>;
+            const cocktailCards = data.me.queue;
             this.handleQueryComplete(cocktailCards);
             return (
               <View>
@@ -243,20 +246,20 @@ const styles = StyleSheet.create({
     borderColor: "grey",
     backgroundColor: "white",
     borderWidth: 1,
-    elevation: 1
+    elevation: 1,
   },
   thumbnail: {
     width: 400,
-    height: 400
+    height: 400,
   },
   text: {
     fontSize: 15,
     paddingTop: 5,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   noMoreCards: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
