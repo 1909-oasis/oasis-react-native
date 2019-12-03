@@ -18,7 +18,7 @@ import AppNavigator from "./navigation/AppNavigator";
 export default function App(props) {
   //Apollo Client
   const httpLink = createHttpLink({
-    uri: "http://localhost:4000/"
+    uri: "http://oasis1909.herokuapp.com/"
   });
   const client = new ApolloClient({
     link: httpLink,
@@ -77,7 +77,7 @@ export default function App(props) {
       <ApolloProvider client={client}>
         <View style={styles.container}>
           {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-          <AppNavigator client={client} />
+          <AppNavigator />
         </View>
       </ApolloProvider>
     );

@@ -14,6 +14,7 @@ import {
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
+import { useQuery } from '@apollo/react-hooks';
 
 const QUEUE_QUERY = gql`
   query {
@@ -137,10 +138,6 @@ export default class App extends React.Component {
     };
     this.handleQueryComplete = this.handleQueryComplete.bind(this);
     console.log("in constructor, this.props:, ", props);
-  }
-
-  componentDidMount() {
-    return;
   }
 
   handleYup(card) {
