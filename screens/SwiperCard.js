@@ -217,7 +217,7 @@ export default class App extends React.Component {
             if (loading) return <Text>Loading Profile!</Text>;
             if (error)
               return <Text>Whoops! Something went wrong.</Text>;
-            const cocktailCards = data.dan.queue; // CHANGE THIS TO DATA.ME.QUEUE
+            const cocktailCards = data.me.queue;
             this.handleQueryComplete(cocktailCards);
             return (
               <View>
