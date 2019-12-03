@@ -34,7 +34,6 @@ export default class LogIn extends React.Component {
 
   _confirm = async data => {
     try {
-      console.log(data);
       const { token } = data.login;
       this._saveUserData(token);
     } catch (error) {

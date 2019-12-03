@@ -14,8 +14,6 @@ export const onSignIn = () =>
 
 console.log(AsyncStorage.clear());
 
-export const onSignOut = () => AsyncStorage.removeItem(USER_TOKEN);
-
 // export const isSignedIn = async () => {
 //   try {
 //     let res = await AsyncStorage.getItem(USER_TOKEN);

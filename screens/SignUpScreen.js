@@ -68,7 +68,6 @@ export default class SignUp extends React.Component {
 
   render() {
     const { firstName, lastName, email, password } = this.state;
-    console.log(this.state);
     return (
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -146,7 +145,6 @@ export default class SignUp extends React.Component {
                   buttonStyle={{ marginTop: 20 }}
                   title="Sign Up"
                   onPress={mutation}
-                  // onPress={() => this.props.navigation.navigate("Main")}
                 />
               )}
             </Mutation>
