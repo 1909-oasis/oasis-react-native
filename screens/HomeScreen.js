@@ -14,9 +14,8 @@ import {
 //Apollo client query hooks
 import gql from "graphql-tag";
 
-import { MonoText } from "../components/StyledText";
 import { Query } from "react-apollo";
-const RECOMINDATION = gql`
+const RECOMMENDATION = gql`
   query {
     getRecommendation {
       id
@@ -32,57 +31,73 @@ const RECOMINDATION = gql`
   }
 `;
 
-export default function HomeScreen() {
-  return (
-    <Query query={RECOMINDATION}>
-      {({ loading, error, data }) => {
-        if (loading) {
-          return <ActivityIndicator size="large" color="grey" />;
-        }
-        if (error) return <Text>Whoops! Something went wrong.</Text>;
-        if (data) {
-          console.log(
-            "this is image",
-            data.getRecommendation.imageUrl
-          );
-          return (
-            <View style={styles.card}>
-              <Text>This is Our Recommendation!!!!</Text>
-              <View>
-                <ImageBackground
-                  style={styles.thumbnail}
-                  source={{ uri: data.getRecommendation.imageUrl }}
-                />
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    color: "white",
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    fontSize: 50,
-                  }}
-                >
-                  {data.getRecommendation.name}
+class HomeScreen extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      trial: true,
+    };
+  }
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.addListener("willFocus", () => {
+      console.log(`HIT HIT HIT HIT HIT`);
+      this.setState({ trial: !this.state.trial });
+    });
+  }
+  render() {
+    console.log(`render!!!!!!!`);
+    return (
+      <Query query={RECOMMENDATION} fetchPolicy="network-only">
+        {({ loading, error, data }) => {
+          if (loading) {
+            return <ActivityIndicator size="large" color="grey" />;
+          }
+          if (error)
+            return <Text>Whoops! Something went wrong.</Text>;
+          if (data) {
+            return (
+              <View style={styles.card}>
+                <Text>
+                  This is Our Recommendation!!!!{" "}
+                  {String(this.state.trial)}
                 </Text>
+                <View>
+                  <ImageBackground
+                    style={styles.thumbnail}
+                    source={{ uri: data.getRecommendation.imageUrl }}
+                  />
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      color: "white",
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      fontSize: 50,
+                    }}
+                  >
+                    {data.getRecommendation.name}
+                  </Text>
+                </View>
+                <View>
+                  {data.getRecommendation.ingredients.map(
+                    (ingredient, idx) => {
+                      return (
+                        <Text style={styles.text} key={idx}>
+                          {ingredient.ingredient.name}
+                        </Text>
+                      );
+                    }
+                  )}
+                </View>
               </View>
-              <View>
-                {data.getRecommendation.ingredients.map(
-                  (ingredient, idx) => {
-                    return (
-                      <Text style={styles.text} key={idx}>
-                        {ingredient.ingredient.name}
-                      </Text>
-                    );
-                  }
-                )}
-              </View>
-            </View>
-          );
-        }
-      }}
-    </Query>
-  );
+            );
+          }
+        }}
+      </Query>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -196,3 +211,5 @@ const styles = StyleSheet.create({
     color: "#2e78b7",
   },
 });
+
+export default HomeScreen;
