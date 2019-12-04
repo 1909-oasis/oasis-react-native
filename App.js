@@ -21,7 +21,7 @@ import gql from "graphql-tag";
 import { setContext } from "apollo-link-context";
 
 import AppNavigator from "./navigation/AppNavigator";
-import { USER_TOKEN } from "./screens/AuthLoadingScreen";
+import { USER_TOKEN } from "./constants/constants";
 
 export default function App(props) {
   // Apollo Client
@@ -69,13 +69,21 @@ export default function App(props) {
     cache: new InMemoryCache(),
   });
 
-  // console.log("this is cache----> ", client.cache);
-  // client.cache.data.clear();
-  // console.log("cache after clearing --->", client.cache);
-
   // client.query({
   //   query: gql`
   //     {
+  //       cocktailStarter(starterPack: true) {
+  //         id
+  //         name
+  //         imageUrl
+  //         ingredients {
+  //           ingredient {
+  //             id
+  //             name
+  //           }
+  //         }
+  //       }
+
   //       me {
   //         firstName
   //         lastName

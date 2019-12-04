@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
-import { USER_TOKEN } from "./AuthLoadingScreen";
+import { USER_TOKEN } from "../constants/constants";
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
@@ -25,8 +25,8 @@ export default class LogIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "cody@email.com",
-      password: "123",
+      email: "slastig@email.com",
+      password: "llama",
     };
     this._confirm = this._confirm.bind(this);
     this._saveUserData = this._saveUserData.bind(this);
