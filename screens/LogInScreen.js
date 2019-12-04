@@ -82,6 +82,9 @@ export default class LogIn extends React.Component {
               placeholder="Email"
               onChangeText={text => this.setState({ email: text })}
               returnKeyType="next"
+              onSubmitEditing={email => {
+                this.passwordRef.focus();
+              }}
             />
             <Input
               inputContainerStyle={{
@@ -89,6 +92,9 @@ export default class LogIn extends React.Component {
                 width: 300,
                 borderBottomWidth: 1,
                 borderBottomColor: "#000000",
+              }}
+              ref={passwordRef => {
+                this.passwordRef = passwordRef;
               }}
               label="Password"
               placeholder="Password"

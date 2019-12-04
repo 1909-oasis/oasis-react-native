@@ -73,12 +73,14 @@ export default class ProfileScreen extends React.Component {
                       "https://advanceddentalhealthcenter.com/wp-content/uploads/2019/05/person-placeholder.jpg",
                   }}
                   style={{
-                    width: 300,
-                    height: 300,
-                    borderRadius: 300 / 2,
+                    width: 200,
+                    height: 200,
+                    borderRadius: 200 / 2,
                   }}
                 />
-                <Text>{data.me.email}</Text>
+                <Text textAlign="center" fontWeight="bold">
+                  {data.me.email}
+                </Text>
                 {/* {data.recommendationList.map(element => {
               <Text key={element.cocktail.id}>{element.cocktail.name}</Text>;
             })} */}
