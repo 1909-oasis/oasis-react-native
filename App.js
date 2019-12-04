@@ -26,7 +26,8 @@ import { USER_TOKEN } from "./screens/AuthLoadingScreen";
 export default function App(props) {
   // Apollo Client
   const httpLink = createHttpLink({
-    uri: "http://oasis1909.herokuapp.com/",
+    // uri: "http://oasis1909.herokuapp.com/",
+    uri: "http://localhost:4000",
   });
 
   // This middleware get the authentication token from AsyncStorage if it exists.
@@ -44,7 +45,7 @@ export default function App(props) {
   // Apollo Links allow you to create middlewares that let you modify requests before they are sent to the server.
   // https://github.com/apollographql/apollo-link
   // We return the headers to the context so httpLink can read them.
-  export const client = new ApolloClient({
+  const client = new ApolloClient({
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
   });

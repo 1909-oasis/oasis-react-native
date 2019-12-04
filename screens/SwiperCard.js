@@ -14,8 +14,8 @@ import {
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
-import { useMutation } from '@apollo/react-hooks';
-import { client } from '../App.js'
+import { useQuery, useMutation } from '@apollo/react-hooks';
+
 
 const QUEUE_QUERY = gql`
   query {
@@ -40,14 +40,26 @@ const QUEUE_QUERY = gql`
 `;
 
 const SWIPE_MUTATION = gql`
-  mutation swipeMutation($cocktailId: String!, $rating: Int!) {
+  mutation {
     swipe(cocktailId: $cocktailId, rating: $rating){
-      userCocktail{
+
         rating
-      }
+
     }
   }
-`
+`;
+
+// const SWIPE_MUTATION = gql`
+// mutation {
+//   swipe(cocktailId:
+//     "ck3gbpg0h0l8y0755nke7nayz",
+//     rating: 1){
+
+//       rating
+
+//   }
+// }
+// `;
 
 // const MAYBE_MUTATION = gql`
 //   mutation maybeMutation(){
@@ -151,22 +163,45 @@ class NoMoreCards extends React.Component {
   }
 }
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      cards: [],
-      outOfCards: false,
-    };
-    this.handleQueryComplete = this.handleQueryComplete.bind(this);
+export default function App(props) {
+
+  let cards = []
+
+  const queryResponse = useQuery(QUEUE_QUERY)
+
+  if(queryResponse.loading) return (<Text>Loading</Text>)
+  cards = queryResponse.data.me.queue
+  //swipe({variables: {cocktailId: "ck3gbnkrq0jbn0755tdmf7uqx", rating: 1}})
+
+  const RIGHT_SWIPE_MUTATION = gql`
+  mutation {
+    swipe(cocktailId:
+      ${cards[0].id},
+      rating: 1){
+
+        rating
+
+    }
   }
+  `;
+
+
+
+  const [rightSwipe] = useMutation(RIGHT_SWIPE_MUTATION)
 
   //swipe takes cocktailId and rating
-  handleYup(card) {
+  function handleYup(card) {
     const cocktailId = card.id
     const rating = 1
+    console.log('card.id, ', card.id)
     console.log("in yup");
-    console.log("client: ", client)
+    try {
+      rightSwipe()
+    } catch (error) {
+      console.error(error)
+    }
+
+    console.log('after swipe!')
     // return(<Mutation mutation = {SWIPE_MUTATION} variables = {{cocktailId, rating}}>
     //   {(mutation, {data, loading, error}) => {
     //     if(loading){
@@ -184,65 +219,39 @@ export default class App extends React.Component {
 
   }
 
-  handleNope(card) {
+  function handleNope(card) {
     console.log("nope");
   }
 
-  handleMaybe(card) {
+  function handleMaybe(card) {
     console.log("maybe");
   }
 
-  cardRemoved(index) {
+  function cardRemoved(index) {
     console.log(`The index is ${index}`);
 
     let CARD_REFRESH_LIMIT = 3;
 
-    if (this.state.cards.length - index <= CARD_REFRESH_LIMIT + 1) {
+    if (cards.length - index <= CARD_REFRESH_LIMIT + 1) {
       console.log(
-        `There are only ${this.state.cards.length -
+        `There are only ${cards.length -
           index -
           1} cards left.`
       );
 
       //TODO add refresh logic here and put the queue on state again
 
-      if (!this.state.outOfCards) {
-        console.log(`Adding ${cards2.length} more cards`);
+      if (!cards.length) {
 
-        this.setState({
-          cards: this.state.cards.concat(cards2),
-          outOfCards: true,
-        });
       }
     }
   }
 
-  handleQueryComplete = cocktails => {
-    this.setState({
-      cards: cocktails,
-    });
-  };
-
-  render() {
-    if (!this.state.cards.length) {
-      return (
-        <Query query={QUEUE_QUERY}>
-          {({ loading, error, data }) => {
-            if (loading) return <Text>Loading Profile!</Text>;
-            if (error)
-              return <Text>Whoops! Something went wrong.</Text>;
-            const cocktailCards = data.me.queue;
-            this.handleQueryComplete(cocktailCards);
-            return <Text>Loading Profile!</Text>
-          }}
-        </Query>
-      );
-    }
     return (
       <View>
         {/* <StarterPack /> */}
         <SwipeCards
-          cards={this.state.cards}
+          cards={cards}
           loop={false}
           renderCard={cardData => <Card {...cardData} />}
           renderNoMoreCards={() => <NoMoreCards />}
@@ -250,14 +259,14 @@ export default class App extends React.Component {
           showNope={true}
           showMaybe={true}
           hasMaybeAction={true}
-          handleYup={this.handleYup}
-          handleNope={this.handleNope}
-          handleMaybe={this.handleMaybe}
-          cardRemoved={this.cardRemoved.bind(this)}
+          handleYup={handleYup}
+          handleNope={handleNope}
+          handleMaybe={handleMaybe}
+          cardRemoved={cardRemoved.bind(this)}
         />
       </View>
-    );
-  }
+
+  )
 }
 
 const styles = StyleSheet.create({
