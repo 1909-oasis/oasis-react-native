@@ -18,28 +18,13 @@ const QUERY = gql`
 export default class ProfileScreen extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   token: "",
-    // };
     this._onSignOut = this._onSignOut.bind(this);
   }
 
   _onSignOut = async () => {
     try {
-      // const token = await AsyncStorage.getItem(USER_TOKEN);
-      const keys = await AsyncStorage.getAllKeys();
-      const [items] = await AsyncStorage.multiGet(keys);
-      console.log("this is the token before setState: ", items);
-      // this.setState({
-      //   token: "",
-      // });
       await AsyncStorage.removeItem(USER_TOKEN);
-      const keys2 = await AsyncStorage.getAllKeys();
-      const [items2] = await AsyncStorage.multiGet(keys2);
       this.props.navigation.navigate("LogIn");
-      console.log("this is the token after setState: ", items2);
-
-      return true;
     } catch (error) {
       console.error(error);
     }
@@ -53,6 +38,7 @@ export default class ProfileScreen extends React.Component {
     return (
       <Query
         query={QUERY}
+        fetchPolicy="network-only"
         onCompleted={() => console.log("completed query")}
       >
         {({ loading, error, data }) => {
