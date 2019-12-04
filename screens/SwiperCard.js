@@ -191,7 +191,16 @@ async function refreshQueue(token){
           }
         }
         }` }),
-})
+}).then((data) =>  {if(data.updateQueue.queue){
+      this.setState({
+        cards: data.updateQueue.queue,
+        outOfCards: false,
+      });
+    } else {
+      this.setState({
+        outOfCards: true
+      })
+}})
 }
 
 
