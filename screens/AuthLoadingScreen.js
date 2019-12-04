@@ -7,28 +7,7 @@ import {
   View,
 } from "react-native";
 
-export const USER_TOKEN = "auth-demo-key";
-
-// export const onSignIn = () =>
-//   AsyncStorage.setItem(USER_TOKEN, "true");
-
-// console.log(AsyncStorage.clear());
-
-// export const isSignedIn = async () => {
-//   try {
-//     let res = await AsyncStorage.getItem(USER_TOKEN);
-//     if (res !== null) {
-//       //   this.props.navigation.navigate("Main");
-//       return true;
-//     } else {
-//       //   this.props.navigation.navigate("Auth");
-//       //   console.log("this is res", res);
-//       return false;
-//     }
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+import { USER_TOKEN } from "../constants/constants";
 
 export const isSignedIn = () => {
   return new Promise((resolve, reject) => {
@@ -53,14 +32,6 @@ class AuthLoadingScreen extends React.Component {
       checkedSignIn: false,
     };
   }
-  //   async componentDidMount() {
-  //     // this._bootstrapAsync()
-  //     try {
-  //       await isSignedIn();
-  //       return this.setState({ signedIn: res, checkedSignIn: true });
-  //     } catch (error) {
-  //       alert("An error has occured");
-  //     }
 
   componentDidMount() {
     this.__isMounted = true;
@@ -69,13 +40,6 @@ class AuthLoadingScreen extends React.Component {
         this.setState({ signedIn: res, checkedSignIn: true });
       }
     });
-    //   .catch(err => alert("An error occurred"));
-    //   }
-
-    // Fetch the token from storage then navigate to our appropriate place
-    //   _bootstrapAsync = async () => {
-    // const userToken = await AsyncStorage.getItem(email);
-    // console.log("--------", userToken);
 
     // This will switch to the Main screen or the Auth screen and this loading screen will be unmounted and thrown away.
     // Commented out the first part of the ternary

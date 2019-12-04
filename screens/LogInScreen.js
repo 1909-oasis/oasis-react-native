@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
-import { USER_TOKEN } from "./AuthLoadingScreen";
+import { USER_TOKEN } from "../constants/constants";
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {

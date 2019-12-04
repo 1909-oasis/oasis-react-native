@@ -21,12 +21,13 @@ import gql from "graphql-tag";
 import { setContext } from "apollo-link-context";
 
 import AppNavigator from "./navigation/AppNavigator";
-import { USER_TOKEN } from "./screens/AuthLoadingScreen";
+import { USER_TOKEN } from "./constants/constants";
 
 export default function App(props) {
   // Apollo Client
   const httpLink = createHttpLink({
     uri: "http://oasis1909.herokuapp.com/",
+    // uri: "http://localhost:4000/",
   });
 
   // This middleware get the authentication token from AsyncStorage if it exists.
@@ -49,41 +50,41 @@ export default function App(props) {
     cache: new InMemoryCache(),
   });
 
-  client.query({
-    query: gql`
-      {
-        cocktailStarter(starterPack: true) {
-          id
-          name
-          imageUrl
-          ingredients {
-            ingredient {
-              id
-              name
-            }
-          }
-        }
+  // client.query({
+  //   query: gql`
+  //     {
+  //       cocktailStarter(starterPack: true) {
+  //         id
+  //         name
+  //         imageUrl
+  //         ingredients {
+  //           ingredient {
+  //             id
+  //             name
+  //           }
+  //         }
+  //       }
 
-        me {
-          firstName
-          lastName
-          email
-          id
-          queue {
-            id
-            name
-            imageUrl
-            ingredients {
-              ingredient {
-                id
-                name
-              }
-            }
-          }
-        }
-      }
-    `,
-  });
+  //       me {
+  //         firstName
+  //         lastName
+  //         email
+  //         id
+  //         queue {
+  //           id
+  //           name
+  //           imageUrl
+  //           ingredients {
+  //             ingredient {
+  //               id
+  //               name
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   `,
+  // });
 
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 

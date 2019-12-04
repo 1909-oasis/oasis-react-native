@@ -7,7 +7,7 @@ import {
 import { Button, Card, Input } from "react-native-elements";
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
-import { USER_TOKEN } from "./AuthLoadingScreen";
+import { USER_TOKEN } from "../constants/constants";
 
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation(
@@ -46,7 +46,7 @@ export default class SignUp extends React.Component {
 
   _confirm = async data => {
     try {
-      const { token } = data.signup.token;
+      const { token } = data.signup;
       this._saveUserData(token);
       this.props.navigation.navigate("Main");
     } catch (error) {
