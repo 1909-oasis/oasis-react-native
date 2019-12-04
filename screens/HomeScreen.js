@@ -34,7 +34,7 @@ const RECOMINDATION = gql`
 
 export default function HomeScreen() {
   return (
-    <Query query={RECOMINDATION}>
+    <Query query={RECOMINDATION} fetchPolicy="network-only">
       {({ loading, error, data }) => {
         if (loading) {
           return <ActivityIndicator size="large" color="grey" />;
