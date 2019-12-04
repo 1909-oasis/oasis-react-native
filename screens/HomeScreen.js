@@ -10,13 +10,15 @@ import {
   View,
   ActivityIndicator,
   ImageBackground,
+  Button,
 } from "react-native";
 //Apollo client query hooks
 import gql from "graphql-tag";
+import { withApollo } from "react-apollo";
 
-import { MonoText } from "../components/StyledText";
 import { Query } from "react-apollo";
-const RECOMINDATION = gql`
+import { InMemoryCache } from "apollo-boost";
+const RECOMMENDATION = gql`
   query {
     getRecommendation {
       id
@@ -32,59 +34,123 @@ const RECOMINDATION = gql`
   }
 `;
 
-export default function HomeScreen() {
-  return (
-    <Query query={RECOMINDATION} fetchPolicy="network-only">
-      {({ loading, error, data }) => {
-        if (loading) {
-          return <ActivityIndicator size="large" color="grey" />;
-        }
-        if (error) return <Text>Whoops! Something went wrong.</Text>;
-        if (data) {
-          console.log(
-            "this is image",
-            data.getRecommendation.imageUrl
-          );
-          return (
-            <View style={styles.card}>
-              <Text>This is Our Recommendation!!!!</Text>
-              <View>
-                <ImageBackground
-                  style={styles.thumbnail}
-                  source={{ uri: data.getRecommendation.imageUrl }}
-                />
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    color: "white",
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    fontSize: 50,
-                  }}
-                >
-                  {data.getRecommendation.name}
-                </Text>
-              </View>
-              <View>
-                {data.getRecommendation.ingredients.map(
-                  (ingredient, idx) => {
-                    return (
-                      <Text style={styles.text} key={idx}>
-                        {ingredient.ingredient.name}
-                      </Text>
-                    );
-                  }
-                )}
-              </View>
-            </View>
-          );
-        }
-      }}
-    </Query>
-  );
-}
+class HomeScreen extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      trial: true,
+      isCached: false,
+      data: {
+        getRecommendation: {
+          ingredients: [],
+        },
+      },
+    };
+  }
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.addListener("willFocus", () => {
+      console.log(`HIT HIT HIT HIT HIT`);
+      this.setState({ trial: !this.state.trial });
+    });
+  }
 
+  dataRecommendations(data) {
+    console.log(this.state.data);
+    return (
+      <View style={styles.card}>
+        <Text>
+          This is Our Recommendation!!!! {String(this.state.trial)}
+        </Text>
+        <View>
+          <ImageBackground
+            style={styles.thumbnail}
+            source={{ uri: data.getRecommendation.imageUrl }}
+          />
+          <Text
+            style={{
+              fontWeight: "bold",
+              color: "white",
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              fontSize: 50,
+            }}
+          >
+            {data.getRecommendation.name}
+          </Text>
+        </View>
+        <View>
+          {data.getRecommendation.ingredients.map(
+            (ingredient, idx) => {
+              return (
+                <Text style={styles.text} key={idx}>
+                  {ingredient.ingredient.name}
+                </Text>
+              );
+            }
+          )}
+        </View>
+        <Button
+          title="hello"
+          onPress={async () => {
+            try {
+              const hello = await this.state.refetch();
+              console.log("helloooo", hello);
+              this.setState({ data: hello[0].data });
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+        ></Button>
+      </View>
+    );
+  }
+  render() {
+    console.log("hello render", this.state.data.getRecommendation);
+    return (
+      <View>
+        {/* {!this.state.isCached ? ( */}
+        <Query query={RECOMMENDATION} fetchPolicy="no-cache">
+          {({ loading, error, data, refetch }) => {
+            if (loading) {
+              return <ActivityIndicator size="large" color="grey" />;
+            }
+            if (error)
+              return <Text>Whoops! Something went wrong.</Text>;
+            {
+              console.log("this is data ----> ", data);
+            }
+            const fetchedData = this.state.isCached
+              ? this.state.data
+              : data;
+            return (
+              <View>
+                {this.dataRecommendations(fetchedData)}
+                <Button
+                  title="refresh"
+                  onPress={async () => {
+                    const refetchedData = await refetch();
+                    console.log(refetchedData);
+                    this.setState({
+                      data: refetchedData.data,
+                      isCached: true,
+                      trial: !this.state.trial,
+                    });
+                  }}
+                ></Button>
+              </View>
+            );
+          }}
+        </Query>
+        {/* ) : (
+          this.dataRecommendations(this.state.data)
+        )} */}
+      </View>
+    );
+  }
+}
+// {this.dataRecommendations(this.state.data)}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -196,3 +262,5 @@ const styles = StyleSheet.create({
     color: "#2e78b7",
   },
 });
+
+export default withApollo(HomeScreen);

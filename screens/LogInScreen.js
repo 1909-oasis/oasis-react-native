@@ -25,8 +25,8 @@ export default class LogIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: "cody@email.com",
+      password: "123",
     };
     this._confirm = this._confirm.bind(this);
     this._saveUserData = this._saveUserData.bind(this);

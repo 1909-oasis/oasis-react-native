@@ -44,34 +44,58 @@ export default function App(props) {
   // Apollo Links allow you to create middlewares that let you modify requests before they are sent to the server.
   // https://github.com/apollographql/apollo-link
   // We return the headers to the context so httpLink can read them.
+
+  const defaultOptions = {
+    watchQuery: {
+      fetchPolicy: "network-only",
+      errorPolicy: "ignore",
+    },
+    query: {
+      fetchPolicy: "network-only",
+      errorPolicy: "all",
+    },
+    mutate: {
+      errorPolicy: "all",
+    },
+  };
+
   const client = new ApolloClient({
+    // ssrMode: true,
+    // ssr: true,
+    // disableNetworkFetches: true,
+    // resultCaching: true,
     link: authLink.concat(httpLink),
+    defaultOptions: defaultOptions,
     cache: new InMemoryCache(),
   });
 
-  client.query({
-    query: gql`
-      {
-        me {
-          firstName
-          lastName
-          email
-          id
-          queue {
-            id
-            name
-            imageUrl
-            ingredients {
-              ingredient {
-                id
-                name
-              }
-            }
-          }
-        }
-      }
-    `,
-  });
+  // console.log("this is cache----> ", client.cache);
+  // client.cache.data.clear();
+  // console.log("cache after clearing --->", client.cache);
+
+  // client.query({
+  //   query: gql`
+  //     {
+  //       me {
+  //         firstName
+  //         lastName
+  //         email
+  //         id
+  //         queue {
+  //           id
+  //           name
+  //           imageUrl
+  //           ingredients {
+  //             ingredient {
+  //               id
+  //               name
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   `,
+  // });
 
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
