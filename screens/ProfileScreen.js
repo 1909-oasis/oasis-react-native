@@ -38,7 +38,7 @@ export default class ProfileScreen extends React.Component {
     return (
       <Query
         query={QUERY}
-        fetchPolicy="network-only"
+        fetchPolicy="network-only" // without: this returns the cached profile
         onCompleted={() => console.log("completed query")}
       >
         {({ loading, error, data }) => {
