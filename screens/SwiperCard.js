@@ -8,33 +8,16 @@ import {
   Image,
   ImageBackground,
   ScrollView,
+  AsyncStorage
 } from "react-native";
 
 //Apollo client query hooks
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
+import {USER_TOKEN} from '../constants/constants.js'
 
-//Data cards
-// const cards = [];
-// const cards2 = [
-//   {
-//     name: "10",
-//     image: "https://media.giphy.com/media/12b3E4U9aSndxC/giphy.gif"
-//   },
-//   {
-//     name: "11",
-//     imageUrl: "https://media4.giphy.com/media/6csVEPEmHWhWg/200.gif"
-//   },
-//   {
-//     name: "12",
-//     imageUrl: "https://media4.giphy.com/media/AA69fOAMCPa4o/200.gif"
-//   },
-//   {
-//     name: "13",
-//     imageUrl: "https://media.giphy.com/media/OVHFny0I7njuU/giphy.gif"
-//   }
-// ];
+const { createApolloFetch } = require('apollo-fetch')
 
 //Schema for apollo client
 
@@ -151,31 +134,86 @@ class NoMoreCards extends React.Component {
   }
 }
 
+async function handleSwipe(cocktailId, rating, token){
+    console.log('token:, ', token)
+    console.log('token type:, ', typeof(token))
+    console.log("in yup");
+
+      fetch('http://localhost:4000/',{
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`},
+        body: JSON.stringify({ query: `
+          mutation{
+            swipe(cocktailId:
+            "${cocktailId}",
+            rating: ${rating}){
+
+            rating
+
+          }
+          }` }),
+}).then((data) => console.log(data))
+}
+
+async function handleMaybe(){
+  console.log('token:, ', token)
+  console.log('token type:, ', typeof(token))
+  console.log("in yup");
+
+    fetch('http://localhost:4000/',{
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`},
+      body: JSON.stringify({ query: `
+        mutation{
+          shiftFromQueue{
+
+          firstName
+
+        }
+        }` }),
+}).then((data) => console.log(data))
+}
+
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       cards: [],
+      token: '',
       outOfCards: false,
     };
     this.handleQueryComplete = this.handleQueryComplete.bind(this);
+    this.handleYup = this.handleYup.bind(this);
+    this.handleNope = this.handleNope.bind(this);
+    this.handleMaybe = this.handleMaybe.bind(this);
     console.log("in constructor, this.props:, ", props);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const token =  await AsyncStorage.getItem(USER_TOKEN)
+    this.setState({
+      token
+    })
+    console.log('in componentDidMount. Token: ', token)
     return;
   }
 
   handleYup(card) {
     console.log("yup");
+    handleSwipe(card.id, 1, this.state.token)
   }
 
   handleNope(card) {
     console.log("nope");
+    handleSwipe(card.id, -1, this.state.token)
   }
 
   handleMaybe(card) {
     console.log("maybe");
+    handleMaybe();
   }
 
   cardRemoved(index) {
