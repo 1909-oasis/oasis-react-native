@@ -7,157 +7,220 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  ActivityIndicator,
+  ImageBackground,
+  Button,
 } from "react-native";
+//Apollo client query hooks
+import gql from "graphql-tag";
+import { withApollo } from "react-apollo";
 
-import { MonoText } from "../components/StyledText";
+import { Query } from "react-apollo";
+import { InMemoryCache } from "apollo-boost";
+const RECOMMENDATION = gql`
+  query {
+    getRecommendation {
+      id
+      name
+      imageUrl
+      ingredients {
+        ingredient {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
 
-export default function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require("../assets/images/robot-dev.png")
-                : require("../assets/images/robot-prod.png")
-            }
-            style={styles.welcomeImage}
+class HomeScreen extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      trial: true,
+      isCached: false,
+      data: {
+        getRecommendation: {
+          ingredients: [],
+        },
+      },
+    };
+  }
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.addListener("willFocus", () => {
+      console.log(`HIT HIT HIT HIT HIT`);
+      this.setState({ trial: !this.state.trial });
+    });
+  }
+
+  dataRecommendations(data) {
+    console.log(this.state.data);
+    return (
+      <View style={styles.card}>
+        <Text>
+          This is Our Recommendation!!!! {String(this.state.trial)}
+        </Text>
+        <View>
+          <ImageBackground
+            style={styles.thumbnail}
+            source={{ uri: data.getRecommendation.imageUrl }}
           />
-        </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Get started by opening</Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
+          <Text
+            style={{
+              fontWeight: "bold",
+              color: "white",
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              fontSize: 50,
+            }}
           >
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change this text and your app will automatically reload.
+            {data.getRecommendation.name}
           </Text>
         </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
+        <View>
+          {data.getRecommendation.ingredients.map(
+            (ingredient, idx) => {
+              return (
+                <Text style={styles.text} key={idx}>
+                  {ingredient.ingredient.name}
+                </Text>
+              );
+            }
+          )}
         </View>
-      </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text>
-
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}
-        >
-          <MonoText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MonoText>
-        </View>
+        <Button
+          title="hello"
+          onPress={async () => {
+            try {
+              const hello = await this.state.refetch();
+              console.log("helloooo", hello);
+              this.setState({ data: hello[0].data });
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+        ></Button>
       </View>
-    </View>
-  );
-}
-
-HomeScreen.navigationOptions = {
-  header: null
-};
-
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
     );
-
+  }
+  render() {
+    console.log("hello render", this.state.data.getRecommendation);
     return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
+      <View>
+        {/* {!this.state.isCached ? ( */}
+        <Query query={RECOMMENDATION} fetchPolicy="no-cache">
+          {({ loading, error, data, refetch }) => {
+            if (loading) {
+              return <ActivityIndicator size="large" color="grey" />;
+            }
+            if (error)
+              return <Text>Whoops! Something went wrong.</Text>;
+            {
+              console.log("this is data ----> ", data);
+            }
+            const fetchedData = this.state.isCached
+              ? this.state.data
+              : data;
+            return (
+              <View>
+                {this.dataRecommendations(fetchedData)}
+                <Button
+                  title="refresh"
+                  onPress={async () => {
+                    const refetchedData = await refetch();
+                    console.log(refetchedData);
+                    this.setState({
+                      data: refetchedData.data,
+                      isCached: true,
+                      trial: !this.state.trial,
+                    });
+                  }}
+                ></Button>
+              </View>
+            );
+          }}
+        </Query>
+        {/* ) : (
+          this.dataRecommendations(this.state.data)
+        )} */}
+      </View>
     );
   }
 }
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    "https://docs.expo.io/versions/latest/workflow/development-mode/"
-  );
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    "https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes"
-  );
-}
-
+// {this.dataRecommendations(this.state.data)}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+  },
+  card: {
+    alignItems: "center",
+    borderRadius: 5,
+    overflow: "hidden",
+    borderColor: "grey",
+    backgroundColor: "white",
+    borderWidth: 1,
+    elevation: 1,
+  },
+  thumbnail: {
+    width: 400,
+    height: 400,
+  },
+  text: {
+    fontSize: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  noMoreCards: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   developmentModeText: {
     marginBottom: 20,
     color: "rgba(0,0,0,0.4)",
     fontSize: 14,
     lineHeight: 19,
-    textAlign: "center"
+    textAlign: "center",
   },
   contentContainer: {
-    paddingTop: 30
+    paddingTop: 30,
   },
   welcomeContainer: {
     alignItems: "center",
     marginTop: 10,
-    marginBottom: 20
+    marginBottom: 20,
   },
   welcomeImage: {
     width: 100,
     height: 80,
     resizeMode: "contain",
     marginTop: 3,
-    marginLeft: -10
+    marginLeft: -10,
   },
   getStartedContainer: {
     alignItems: "center",
-    marginHorizontal: 50
+    marginHorizontal: 50,
   },
   homeScreenFilename: {
-    marginVertical: 7
+    marginVertical: 7,
   },
   codeHighlightText: {
-    color: "rgba(96,100,109, 0.8)"
+    color: "rgba(96,100,109, 0.8)",
   },
   codeHighlightContainer: {
     backgroundColor: "rgba(0,0,0,0.05)",
     borderRadius: 3,
-    paddingHorizontal: 4
+    paddingHorizontal: 4,
   },
   getStartedText: {
     fontSize: 17,
     color: "rgba(96,100,109, 1)",
     lineHeight: 24,
-    textAlign: "center"
+    textAlign: "center",
   },
   tabBarInfoContainer: {
     position: "absolute",
@@ -169,33 +232,35 @@ const styles = StyleSheet.create({
         shadowColor: "black",
         shadowOffset: { width: 0, height: -3 },
         shadowOpacity: 0.1,
-        shadowRadius: 3
+        shadowRadius: 3,
       },
       android: {
-        elevation: 20
-      }
+        elevation: 20,
+      },
     }),
     alignItems: "center",
     backgroundColor: "#fbfbfb",
-    paddingVertical: 20
+    paddingVertical: 20,
   },
   tabBarInfoText: {
     fontSize: 17,
     color: "rgba(96,100,109, 1)",
-    textAlign: "center"
+    textAlign: "center",
   },
   navigationFilename: {
-    marginTop: 5
+    marginTop: 5,
   },
   helpContainer: {
     marginTop: 15,
-    alignItems: "center"
+    alignItems: "center",
   },
   helpLink: {
-    paddingVertical: 15
+    paddingVertical: 15,
   },
   helpLinkText: {
     fontSize: 14,
-    color: "#2e78b7"
-  }
+    color: "#2e78b7",
+  },
 });
+
+export default withApollo(HomeScreen);

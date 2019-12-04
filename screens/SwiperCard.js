@@ -283,7 +283,7 @@ export default class App extends React.Component {
   render() {
     if (!this.state.cards.length) {
       return (
-        <Query query={QUEUE_QUERY}>
+        <Query query={QUEUE_QUERY} fetchPolicy="network-only">
           {({ loading, error, data }) => {
             if (loading) return <Text>Loading Profile!</Text>;
             if (error)

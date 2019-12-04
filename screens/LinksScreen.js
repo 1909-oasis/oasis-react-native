@@ -7,15 +7,32 @@ import {
   Image,
   ImageBackground,
   View,
+  Button,
 } from "react-native";
 import { ExpoLinksView } from "@expo/samples";
 import SwipeCards from "./SwiperCard.js";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { Query, withApollo } from "react-apollo";
+
+const RECOMMENDATION = gql`
+  query {
+    getRecommendation {
+      id
+      name
+      imageUrl
+      ingredients {
+        ingredient {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
 
 // import Icon, {drink} from 'react-native-vector-icons/Ionicons'
 
-export default function LinksScreen() {
+function LinksScreen(props) {
   // const query = gql`
   //   query {
   //     cocktailStarter(starterPack: true) {
@@ -35,6 +52,23 @@ export default function LinksScreen() {
   return (
     <ScrollView style={styles.container}>
       <SwipeCards />
+      <Button
+        onPress={async () => {
+          await props.client.reFetchObservableQueries();
+          console.log("please");
+          // try {
+          //   const data = props.client.readQuery({
+          //     query: RECOMMENDATION,
+          //   });
+          //   console.log("hello there?", data);
+          // } catch (e) {
+          //   console.log("woops", e);
+          // }
+        }}
+        title="press"
+      >
+        Come On
+      </Button>
     </ScrollView>
   );
 
@@ -78,3 +112,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
+
+export default withApollo(LinksScreen);

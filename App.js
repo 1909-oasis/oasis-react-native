@@ -26,8 +26,7 @@ import { USER_TOKEN } from "./constants/constants";
 export default function App(props) {
   // Apollo Client
   const httpLink = createHttpLink({
-    uri: "http://oasis1909.herokuapp.com/",
-    // uri: "http://localhost:4000/",
+    uri: "http://localhost:4000/",
   });
 
   // This middleware get the authentication token from AsyncStorage if it exists.
@@ -45,8 +44,28 @@ export default function App(props) {
   // Apollo Links allow you to create middlewares that let you modify requests before they are sent to the server.
   // https://github.com/apollographql/apollo-link
   // We return the headers to the context so httpLink can read them.
+
+  const defaultOptions = {
+    watchQuery: {
+      fetchPolicy: "network-only",
+      errorPolicy: "ignore",
+    },
+    query: {
+      fetchPolicy: "network-only",
+      errorPolicy: "all",
+    },
+    mutate: {
+      errorPolicy: "all",
+    },
+  };
+
   const client = new ApolloClient({
+    // ssrMode: true,
+    // ssr: true,
+    // disableNetworkFetches: true,
+    // resultCaching: true,
     link: authLink.concat(httpLink),
+    defaultOptions: defaultOptions,
     cache: new InMemoryCache(),
   });
 
