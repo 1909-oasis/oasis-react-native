@@ -139,7 +139,7 @@ async function handleSwipe(cocktailId, rating, token){
     console.log('token type:, ', typeof(token))
     console.log("in yup");
 
-      fetch('http://localhost:4000/',{
+      fetch('http://oasis1909.herokuapp.com/',{
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`},
@@ -153,7 +153,7 @@ async function handleSwipe(cocktailId, rating, token){
 
           }
           }` }),
-}).then((data) => console.log(data))
+})
 }
 
 async function handleMaybe(){
@@ -161,7 +161,7 @@ async function handleMaybe(){
   console.log('token type:, ', typeof(token))
   console.log("in yup");
 
-    fetch('http://localhost:4000/',{
+    return await fetch('http://oasis1909.herokuapp.com/',{
       method: 'POST',
       headers: { 'Content-Type': 'application/json',
                   'Authorization': `Bearer ${token}`},
@@ -173,7 +173,34 @@ async function handleMaybe(){
 
         }
         }` }),
-}).then((data) => console.log(data))
+      })
+}
+
+async function refreshQueue(token){
+  return await fetch('http://oasis1909.herokuapp.com/',{
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`},
+      body: JSON.stringify({ query: `
+        mutation{
+          updateQueue{
+          queue{
+            id
+            name
+            imageUrl
+          }
+        }
+        }` }),
+}).then((data) =>  {if(data.updateQueue.queue){
+      this.setState({
+        cards: data.updateQueue.queue,
+        outOfCards: false,
+      });
+    } else {
+      this.setState({
+        outOfCards: true
+      })
+}})
 }
 
 
@@ -231,12 +258,18 @@ export default class App extends React.Component {
       //TODO add refresh logic here and put the queue on state again
 
       if (!this.state.outOfCards) {
-        console.log(`Adding ${cards2.length} more cards`);
+        const data = refreshQueue(this.state.token)
+        if(data.updateQueue.queue){
+          this.setState({
+            cards: data.updateQueue.queue,
+            outOfCards: false,
+          });
+        } else {
+          this.setState({
+            outOfCards: true
+          })
+        }
 
-        this.setState({
-          cards: this.state.cards.concat(cards2),
-          outOfCards: true,
-        });
       }
     }
   }
