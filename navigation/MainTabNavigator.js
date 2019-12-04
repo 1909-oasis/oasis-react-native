@@ -15,25 +15,6 @@ const config = Platform.select({
   default: {},
 });
 
-const HomeStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-  },
-  config
-);
-
-HomeStack.navigationOptions = {
-  tabBarLabel: "GetMyRec",
-  tabBarIcon: () => (
-    <TabBarIcon
-      // focused={focused}
-      name={Platform.OS === "ios" ? `ios-wine` : "md-wine"}
-    />
-  ),
-};
-
-HomeStack.path = "";
-
 const LinksStack = createStackNavigator(
   {
     Links: LinksScreen,
@@ -52,6 +33,25 @@ LinksStack.navigationOptions = {
 };
 
 LinksStack.path = "";
+
+const HomeStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+  },
+  config
+);
+
+HomeStack.navigationOptions = {
+  tabBarLabel: "GetMyRec",
+  tabBarIcon: () => (
+    <TabBarIcon
+      // focused={focused}
+      name={Platform.OS === "ios" ? `ios-wine` : "md-wine"}
+    />
+  ),
+};
+
+HomeStack.path = "";
 
 const ProfileStack = createStackNavigator(
   {
@@ -72,11 +72,14 @@ ProfileStack.navigationOptions = {
 
 ProfileStack.path = "";
 
-const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  ProfileStack,
-});
+const tabNavigator = createBottomTabNavigator(
+  {
+    HomeStack,
+    LinksStack,
+    ProfileStack,
+  },
+  { initialRouteName: "LinksStack" }
+);
 
 tabNavigator.path = "";
 
