@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
-import { USER_TOKEN } from "./AuthLoadingScreen";
+import { USER_TOKEN } from "../constants/constants";
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
@@ -43,6 +43,8 @@ export default class LogIn extends React.Component {
 
   _saveUserData = async token => {
     try {
+      console.log(token);
+      await AsyncStorage.removeItem(USER_TOKEN);
       await AsyncStorage.setItem(USER_TOKEN, token);
       this.props.navigation.navigate("Main");
     } catch (error) {
