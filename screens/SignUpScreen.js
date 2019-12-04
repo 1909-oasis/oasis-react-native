@@ -96,6 +96,9 @@ export default class SignUp extends React.Component {
                 this.setState({ firstName: text })
               }
               returnKeyType="next"
+              onSubmitEditing={firstName => {
+                this.lastNameRef.focus();
+              }}
             />
             <Input
               inputContainerStyle={{
@@ -103,11 +106,17 @@ export default class SignUp extends React.Component {
                 width: 300,
                 borderBottomWidth: 1,
                 borderBottomColor: "#000000",
+              }}
+              ref={lastNameRef => {
+                this.lastNameRef = lastNameRef;
               }}
               label="Last Name"
               placeholder="Last Name"
               onChangeText={text => this.setState({ lastName: text })}
               returnKeyType="next"
+              onSubmitEditing={lastName => {
+                this.emailRef.focus();
+              }}
             />
             <Input
               inputContainerStyle={{
@@ -116,10 +125,16 @@ export default class SignUp extends React.Component {
                 borderBottomWidth: 1,
                 borderBottomColor: "#000000",
               }}
+              ref={emailRef => {
+                this.emailRef = emailRef;
+              }}
               label="Email"
               placeholder="Email"
               onChangeText={text => this.setState({ email: text })}
               returnKeyType="next"
+              onSubmitEditing={email => {
+                this.passwordRef.focus();
+              }}
             />
             <Input
               inputContainerStyle={{
@@ -127,6 +142,9 @@ export default class SignUp extends React.Component {
                 width: 300,
                 borderBottomWidth: 1,
                 borderBottomColor: "#000000",
+              }}
+              ref={passwordRef => {
+                this.passwordRef = passwordRef;
               }}
               label="Password"
               placeholder="Password"
