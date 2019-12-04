@@ -15,30 +15,9 @@ import {
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
-import {USER_TOKEN} from './AuthLoadingScreen'
+import {USER_TOKEN} from '../constants/constants.js'
 
 const { createApolloFetch } = require('apollo-fetch')
-
-//Data cards
-// const cards = [];
-// const cards2 = [
-//   {
-//     name: "10",
-//     image: "https://media.giphy.com/media/12b3E4U9aSndxC/giphy.gif"
-//   },
-//   {
-//     name: "11",
-//     imageUrl: "https://media4.giphy.com/media/6csVEPEmHWhWg/200.gif"
-//   },
-//   {
-//     name: "12",
-//     imageUrl: "https://media4.giphy.com/media/AA69fOAMCPa4o/200.gif"
-//   },
-//   {
-//     name: "13",
-//     imageUrl: "https://media.giphy.com/media/OVHFny0I7njuU/giphy.gif"
-//   }
-// ];
 
 //Schema for apollo client
 
