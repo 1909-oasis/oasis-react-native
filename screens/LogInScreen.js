@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   View,
   ImageBackground,
+  StyleSheet,
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 import { USER_TOKEN } from "../constants/constants";
@@ -26,8 +27,8 @@ export default class LogIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: "dan@email.com",
+      password: "1234",
     };
     this._confirm = this._confirm.bind(this);
     this._saveUserData = this._saveUserData.bind(this);
@@ -80,9 +81,10 @@ export default class LogIn extends React.Component {
                 height: 40,
                 width: 300,
                 borderBottomWidth: 1,
-                borderBottomColor: "#000000",
+                borderBottomColor: "rgb(19,4,4)",
               }}
               label="Email"
+              labelStyle={{ color: "rgb(19,4,4)" }}
               placeholder="Email"
               autoCapitalize="none"
               autoCorrect={false}
@@ -97,12 +99,13 @@ export default class LogIn extends React.Component {
                 height: 40,
                 width: 300,
                 borderBottomWidth: 1,
-                borderBottomColor: "#000000",
+                borderBottomColor: "rgb(19,4,4)",
               }}
               ref={passwordRef => {
                 this.passwordRef = passwordRef;
               }}
               label="Password"
+              labelStyle={{ color: "rgb(19,4,4)" }}
               placeholder="Password"
               onChangeText={text => this.setState({ password: text })}
               // This secures user input for a field.
@@ -116,7 +119,10 @@ export default class LogIn extends React.Component {
             >
               {mutation => (
                 <Button
-                  buttonStyle={{ marginTop: 20 }}
+                  buttonStyle={{
+                    marginTop: 20,
+                    backgroundColor: "rgb(69,211,193)",
+                  }}
                   title="Log In"
                   onPress={mutation}
                 />
@@ -126,6 +132,7 @@ export default class LogIn extends React.Component {
               type="clear"
               textStyle={{ color: "bcbec1" }}
               title="Sign Up"
+              titleStyle={{ color: "rgb(69,211,193)" }}
               onPress={() => this.props.navigation.navigate("SignUp")}
             />
           </Card>
@@ -136,3 +143,9 @@ export default class LogIn extends React.Component {
     );
   }
 }
+
+// const styles = StyleSheet.create({
+//     formText: {
+
+//     }
+// })

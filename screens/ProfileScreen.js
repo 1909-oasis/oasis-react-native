@@ -62,7 +62,7 @@ export default class ProfileScreen extends React.Component {
                   paddingVertical: 20,
                   justifyContent: "center",
                   alignItems: "center",
-                  opacity: .9,
+                  opacity: .95,
                   // backgroundColor: "rgb(69,211,193)",
                 }}
               >
