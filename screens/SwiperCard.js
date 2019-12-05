@@ -139,7 +139,7 @@ async function handleSwipe(cocktailId, rating, token){
     console.log('token type:, ', typeof(token))
     console.log("in yup");
 
-      fetch('http://oasis1909.herokuapp.com/',{
+      fetch('http://localhost:4000/',{
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`},
@@ -156,12 +156,12 @@ async function handleSwipe(cocktailId, rating, token){
 })
 }
 
-async function handleMaybe(){
+async function handleMaybe(token){
   console.log('token:, ', token)
   console.log('token type:, ', typeof(token))
   console.log("in yup");
 
-    return await fetch('http://oasis1909.herokuapp.com/',{
+    return await fetch('http://localhost:4000/',{
       method: 'POST',
       headers: { 'Content-Type': 'application/json',
                   'Authorization': `Bearer ${token}`},
@@ -177,30 +177,35 @@ async function handleMaybe(){
 }
 
 async function refreshQueue(token){
-  return await fetch('http://oasis1909.herokuapp.com/',{
+  const response =  await fetch('http://localhost:4000/',{
       method: 'POST',
       headers: { 'Content-Type': 'application/json',
                   'Authorization': `Bearer ${token}`},
       body: JSON.stringify({ query: `
         mutation{
           updateQueue{
-          queue{
+            id
+            queue{
             id
             name
             imageUrl
+            ingredients{
+              ingredient{
+                id
+                name
+              }
+            }
           }
         }
         }` }),
-}).then((data) =>  {if(data.updateQueue.queue){
-      this.setState({
-        cards: data.updateQueue.queue,
-        outOfCards: false,
-      });
-    } else {
-      this.setState({
-        outOfCards: true
-      })
-}})
+    })
+    const json = await response.json()
+    console.log('resonse.json: ', json)
+    return json.data.updateQueue.queue
+}
+
+function shuffleQueue(queue) {
+  queue.sort(() => Math.random() - 0.5);
 }
 
 
@@ -240,10 +245,10 @@ export default class App extends React.Component {
 
   handleMaybe(card) {
     console.log("maybe");
-    handleMaybe();
+    handleMaybe(this.state.token);
   }
 
-  cardRemoved(index) {
+  async cardRemoved(index) {
     console.log(`The index is ${index}`);
 
     let CARD_REFRESH_LIMIT = 3;
@@ -258,10 +263,11 @@ export default class App extends React.Component {
       //TODO add refresh logic here and put the queue on state again
 
       if (!this.state.outOfCards) {
-        const data = refreshQueue(this.state.token)
-        if(data.updateQueue.queue){
-          this.setState({
-            cards: data.updateQueue.queue,
+        const queue = await refreshQueue(this.state.token)
+        shuffleQueue(queue)
+        if(queue){
+          await this.setState({
+            cards: queue,
             outOfCards: false,
           });
         } else {
@@ -275,6 +281,7 @@ export default class App extends React.Component {
   }
 
   handleQueryComplete = cocktails => {
+    shuffleQueue(cocktails)
     this.setState({
       cards: cocktails,
     });
