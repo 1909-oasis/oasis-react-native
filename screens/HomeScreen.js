@@ -50,13 +50,11 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     const { navigation } = this.props;
     navigation.addListener("willFocus", () => {
-      console.log(`HIT HIT HIT HIT HIT`);
       this.setState({ trial: !this.state.trial });
     });
   }
 
   dataRecommendations(data) {
-    console.log(this.state.data);
     return (
       <View style={styles.card}>
         <Text>
@@ -96,7 +94,6 @@ class HomeScreen extends React.Component {
           onPress={async () => {
             try {
               const hello = await this.state.refetch();
-              console.log("helloooo", hello);
               this.setState({ data: hello[0].data });
             } catch (e) {
               console.log(e);
@@ -107,7 +104,6 @@ class HomeScreen extends React.Component {
     );
   }
   render() {
-    console.log("hello render", this.state.data.getRecommendation);
     return (
       <View>
         {/* {!this.state.isCached ? ( */}
@@ -118,9 +114,7 @@ class HomeScreen extends React.Component {
             }
             if (error)
               return <Text>Whoops! Something went wrong.</Text>;
-            {
-              console.log("this is data ----> ", data);
-            }
+
             const fetchedData = this.state.isCached
               ? this.state.data
               : data;
@@ -131,7 +125,7 @@ class HomeScreen extends React.Component {
                   title="refresh"
                   onPress={async () => {
                     const refetchedData = await refetch();
-                    console.log(refetchedData);
+
                     this.setState({
                       data: refetchedData.data,
                       isCached: true,

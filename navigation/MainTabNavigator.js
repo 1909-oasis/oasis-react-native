@@ -30,6 +30,9 @@ LinksStack.navigationOptions = {
       name={Platform.OS === "ios" ? "ios-albums" : "md-albums"}
     />
   ),
+  tabBarOptions: {
+    activeTintColor: "rgb(69,211,193)",
+  },
 };
 
 LinksStack.path = "";
@@ -49,6 +52,9 @@ HomeStack.navigationOptions = {
       name={Platform.OS === "ios" ? `ios-wine` : "md-wine"}
     />
   ),
+  tabBarOptions: {
+    activeTintColor: "rgb(69,211,193)",
+  },
 };
 
 HomeStack.path = "";
@@ -68,6 +74,9 @@ ProfileStack.navigationOptions = {
       name={Platform.OS === "ios" ? "ios-person" : "md-person"}
     />
   ),
+  tabBarOptions: {
+    activeTintColor: "rgb(69,211,193)",
+  },
 };
 
 ProfileStack.path = "";
