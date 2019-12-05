@@ -82,7 +82,7 @@ export default class SignUp extends React.Component {
             alignItems: "center",
           }}
         >
-          <Card>
+          <Card containerStyle={{ borderRadius: 8 }}>
             <Input
               inputContainerStyle={{
                 height: 40,
@@ -166,14 +166,14 @@ export default class SignUp extends React.Component {
                 />
               )}
             </Mutation>
-            <Button
+            {/* <Button
               type="clear"
               textStyle={{ color: "#bcbec1" }}
               title="Log In"
               onPress={() => {
                 this.props.navigation.navigate("LogIn");
               }}
-            />
+            /> */}
           </Card>
         </View>
       </KeyboardAvoidingView>

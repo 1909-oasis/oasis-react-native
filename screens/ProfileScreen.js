@@ -66,6 +66,7 @@ export default class ProfileScreen extends React.Component {
                   flex: 1,
                   justifyContent: "flex-start",
                   alignItems: "center",
+                  borderRadius: 8,
                 }}
                 title={`${data.me.firstName} ${data.me.lastName}`}
               >
