@@ -80,6 +80,8 @@ export default class LogIn extends React.Component {
               }}
               label="Email"
               placeholder="Email"
+              autoCapitalize="none"
+              autoCorrect={false}
               onChangeText={text => this.setState({ email: text })}
               returnKeyType="next"
               onSubmitEditing={email => {
@@ -98,6 +100,7 @@ export default class LogIn extends React.Component {
               }}
               label="Password"
               placeholder="Password"
+              autoCorrect={false}
               onChangeText={text => this.setState({ password: text })}
               // This secures user input for a field.
               secureTextEntry={true}

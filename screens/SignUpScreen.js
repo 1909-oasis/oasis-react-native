@@ -92,6 +92,7 @@ export default class SignUp extends React.Component {
               }}
               label="First Name"
               placeholder="First Name"
+              autoCorrect={false}
               onChangeText={text =>
                 this.setState({ firstName: text })
               }
@@ -112,6 +113,7 @@ export default class SignUp extends React.Component {
               }}
               label="Last Name"
               placeholder="Last Name"
+              autoCorrect={false}
               onChangeText={text => this.setState({ lastName: text })}
               returnKeyType="next"
               onSubmitEditing={lastName => {
@@ -130,6 +132,8 @@ export default class SignUp extends React.Component {
               }}
               label="Email"
               placeholder="Email"
+              autoCapitalize="none"
+              autoCorrect={false}
               onChangeText={text => this.setState({ email: text })}
               returnKeyType="next"
               onSubmitEditing={email => {
