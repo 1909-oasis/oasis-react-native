@@ -52,23 +52,6 @@ function LinksScreen(props) {
   return (
     <ScrollView style={styles.container}>
       <SwipeCards />
-      <Button
-        onPress={async () => {
-          await props.client.reFetchObservableQueries();
-          console.log("please");
-          // try {
-          //   const data = props.client.readQuery({
-          //     query: RECOMMENDATION,
-          //   });
-          //   console.log("hello there?", data);
-          // } catch (e) {
-          //   console.log("woops", e);
-          // }
-        }}
-        title="press"
-      >
-        Come On
-      </Button>
     </ScrollView>
   );
 
