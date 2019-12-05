@@ -3,6 +3,7 @@ import {
   AsyncStorage,
   KeyboardAvoidingView,
   View,
+  ImageBackground
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 import gql from "graphql-tag";
@@ -74,12 +75,14 @@ export default class SignUp extends React.Component {
         behavior="padding"
         enabled
       >
+        <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
         <View
           style={{
             flex: 1,
             paddingVertical: 20,
             justifyContent: "flex-start",
             alignItems: "center",
+            opacity: .9
           }}
         >
           <Card containerStyle={{ borderRadius: 8 }}>
@@ -171,6 +174,7 @@ export default class SignUp extends React.Component {
             </Mutation>
           </Card>
         </View>
+        </ImageBackground>
       </KeyboardAvoidingView>
     );
   }

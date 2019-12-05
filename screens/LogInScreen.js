@@ -5,6 +5,7 @@ import {
   AsyncStorage,
   KeyboardAvoidingView,
   View,
+  ImageBackground,
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 import { USER_TOKEN } from "../constants/constants";
@@ -57,17 +58,20 @@ export default class LogIn extends React.Component {
   render() {
     const { email, password } = this.state;
     return (
+
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior="padding"
         enabled
       >
+           <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
         <View
           style={{
             flex: 1,
             paddingVertical: 20,
             justifyContent: "flex-start",
             alignItems: "center",
+            opacity: .9
           }}
         >
           <Card containerStyle={{ borderRadius: 8 }}>
@@ -126,7 +130,9 @@ export default class LogIn extends React.Component {
             />
           </Card>
         </View>
+        </ImageBackground>
       </KeyboardAvoidingView>
+
     );
   }
 }
