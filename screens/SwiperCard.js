@@ -8,16 +8,16 @@ import {
   Image,
   ImageBackground,
   ScrollView,
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
 
 //Apollo client query hooks
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
-import {USER_TOKEN} from '../constants/constants.js'
+import { USER_TOKEN } from "../constants/constants.js";
 
-const { createApolloFetch } = require('apollo-fetch')
+const { createApolloFetch } = require("apollo-fetch");
 
 //Schema for apollo client
 
@@ -134,10 +134,10 @@ class NoMoreCards extends React.Component {
   }
 }
 
-async function handleSwipe(cocktailId, rating, token){
-    console.log('token:, ', token)
-    console.log('token type:, ', typeof(token))
-    console.log("in yup");
+async function handleSwipe(cocktailId, rating, token) {
+  console.log("token:, ", token);
+  console.log("token type:, ", typeof token);
+  console.log("in yup");
 
       fetch('http://localhost:4000/',{
         method: 'POST',
@@ -152,8 +152,9 @@ async function handleSwipe(cocktailId, rating, token){
             rating
 
           }
-          }` }),
-})
+          }`,
+    }),
+  });
 }
 
 async function handleMaybe(token){
@@ -172,8 +173,9 @@ async function handleMaybe(token){
           firstName
 
         }
-        }` }),
-      })
+        }`,
+    }),
+  });
 }
 
 async function refreshQueue(token){
@@ -200,7 +202,7 @@ async function refreshQueue(token){
         }` }),
     })
     const json = await response.json()
-    console.log('resonse.json: ', json)
+    console.log('resonse.json: ', json.data.updateQueue.queue)
     return json.data.updateQueue.queue
 }
 
@@ -208,13 +210,12 @@ function shuffleQueue(queue) {
   queue.sort(() => Math.random() - 0.5);
 }
 
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       cards: [],
-      token: '',
+      token: "",
       outOfCards: false,
     };
     this.handleQueryComplete = this.handleQueryComplete.bind(this);
@@ -225,22 +226,22 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
-    const token =  await AsyncStorage.getItem(USER_TOKEN)
+    const token = await AsyncStorage.getItem(USER_TOKEN);
     this.setState({
-      token
-    })
-    console.log('in componentDidMount. Token: ', token)
+      token,
+    });
+    console.log("in componentDidMount. Token: ", token);
     return;
   }
 
   handleYup(card) {
     console.log("yup");
-    handleSwipe(card.id, 1, this.state.token)
+    handleSwipe(card.id, 1, this.state.token);
   }
 
   handleNope(card) {
     console.log("nope");
-    handleSwipe(card.id, -1, this.state.token)
+    handleSwipe(card.id, -1, this.state.token);
   }
 
   handleMaybe(card) {
@@ -272,10 +273,9 @@ export default class App extends React.Component {
           });
         } else {
           this.setState({
-            outOfCards: true
-          })
+            outOfCards: true,
+          });
         }
-
       }
     }
   }
