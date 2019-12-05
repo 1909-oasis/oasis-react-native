@@ -8,16 +8,16 @@ import {
   Image,
   ImageBackground,
   ScrollView,
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
 
 //Apollo client query hooks
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
-import {USER_TOKEN} from '../constants/constants.js'
+import { USER_TOKEN } from "../constants/constants.js";
 
-const { createApolloFetch } = require('apollo-fetch')
+const { createApolloFetch } = require("apollo-fetch");
 
 //Schema for apollo client
 
@@ -134,16 +134,19 @@ class NoMoreCards extends React.Component {
   }
 }
 
-async function handleSwipe(cocktailId, rating, token){
-    console.log('token:, ', token)
-    console.log('token type:, ', typeof(token))
-    console.log("in yup");
+async function handleSwipe(cocktailId, rating, token) {
+  console.log("token:, ", token);
+  console.log("token type:, ", typeof token);
+  console.log("in yup");
 
-      fetch('http://oasis1909.herokuapp.com/',{
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`},
-        body: JSON.stringify({ query: `
+  fetch("http://oasis1909.herokuapp.com/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      query: `
           mutation{
             swipe(cocktailId:
             "${cocktailId}",
@@ -152,36 +155,44 @@ async function handleSwipe(cocktailId, rating, token){
             rating
 
           }
-          }` }),
-})
+          }`,
+    }),
+  });
 }
 
-async function handleMaybe(){
-  console.log('token:, ', token)
-  console.log('token type:, ', typeof(token))
+async function handleMaybe() {
+  console.log("token:, ", token);
+  console.log("token type:, ", typeof token);
   console.log("in yup");
 
-    return await fetch('http://oasis1909.herokuapp.com/',{
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}`},
-      body: JSON.stringify({ query: `
+  return await fetch("http://oasis1909.herokuapp.com/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      query: `
         mutation{
           shiftFromQueue{
 
           firstName
 
         }
-        }` }),
-      })
+        }`,
+    }),
+  });
 }
 
-async function refreshQueue(token){
-  return await fetch('http://oasis1909.herokuapp.com/',{
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}`},
-      body: JSON.stringify({ query: `
+async function refreshQueue(token) {
+  return await fetch("http://oasis1909.herokuapp.com/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      query: `
         mutation{
           updateQueue{
           queue{
@@ -190,26 +201,28 @@ async function refreshQueue(token){
             imageUrl
           }
         }
-        }` }),
-}).then((data) =>  {if(data.updateQueue.queue){
+        }`,
+    }),
+  }).then(data => {
+    if (data.updateQueue.queue) {
       this.setState({
         cards: data.updateQueue.queue,
         outOfCards: false,
       });
     } else {
       this.setState({
-        outOfCards: true
-      })
-}})
+        outOfCards: true,
+      });
+    }
+  });
 }
-
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       cards: [],
-      token: '',
+      token: "",
       outOfCards: false,
     };
     this.handleQueryComplete = this.handleQueryComplete.bind(this);
@@ -220,22 +233,22 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
-    const token =  await AsyncStorage.getItem(USER_TOKEN)
+    const token = await AsyncStorage.getItem(USER_TOKEN);
     this.setState({
-      token
-    })
-    console.log('in componentDidMount. Token: ', token)
+      token,
+    });
+    console.log("in componentDidMount. Token: ", token);
     return;
   }
 
   handleYup(card) {
     console.log("yup");
-    handleSwipe(card.id, 1, this.state.token)
+    handleSwipe(card.id, 1, this.state.token);
   }
 
   handleNope(card) {
     console.log("nope");
-    handleSwipe(card.id, -1, this.state.token)
+    handleSwipe(card.id, -1, this.state.token);
   }
 
   handleMaybe(card) {
@@ -258,18 +271,17 @@ export default class App extends React.Component {
       //TODO add refresh logic here and put the queue on state again
 
       if (!this.state.outOfCards) {
-        const data = refreshQueue(this.state.token)
-        if(data.updateQueue.queue){
+        const data = refreshQueue(this.state.token);
+        if (data.updateQueue.queue) {
           this.setState({
             cards: data.updateQueue.queue,
             outOfCards: false,
           });
         } else {
           this.setState({
-            outOfCards: true
-          })
+            outOfCards: true,
+          });
         }
-
       }
     }
   }

@@ -27,6 +27,7 @@ export default function App(props) {
   // Apollo Client
   const httpLink = createHttpLink({
     uri: "http://localhost:4000/",
+    // uri: "http://oasis1909.herokuapp.com/",
   });
 
   // This middleware get the authentication token from AsyncStorage if it exists.
