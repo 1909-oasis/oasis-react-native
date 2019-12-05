@@ -5,9 +5,11 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import { USER_TOKEN } from "../constants/constants";
 
+// When using the fetchPolicy prop in the Query component, "id" must be included in the the gql object.
 const QUERY = gql`
   {
     me {
+      id
       firstName
       lastName
       email
@@ -38,7 +40,7 @@ export default class ProfileScreen extends React.Component {
     return (
       <Query
         query={QUERY}
-        fetchPolicy="network-only" // without: this returns the cached profile
+        fetchPolicy="network-only" // Without the fetchPolicy, this returns the cached profile.
         onCompleted={() => console.log("completed query")}
       >
         {({ loading, error, data }) => {
@@ -69,9 +71,12 @@ export default class ProfileScreen extends React.Component {
               >
                 <Image
                   source={{
+                    // This is just a placeholder profile picture for now.
+                    // If we want to later implement a user image, we need to include this in our schema on the backend.
                     uri:
                       "https://advanceddentalhealthcenter.com/wp-content/uploads/2019/05/person-placeholder.jpg",
                   }}
+                  // This makes the image round.
                   style={{
                     width: 200,
                     height: 200,
