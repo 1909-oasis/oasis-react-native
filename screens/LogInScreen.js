@@ -56,7 +56,6 @@ export default class LogIn extends React.Component {
 
   render() {
     const { email, password } = this.state;
-    // if (this.state.email && this.state.password) {
     return (
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -101,7 +100,6 @@ export default class LogIn extends React.Component {
               }}
               label="Password"
               placeholder="Password"
-              autoCorrect={false}
               onChangeText={text => this.setState({ password: text })}
               // This secures user input for a field.
               secureTextEntry={true}
@@ -132,4 +130,3 @@ export default class LogIn extends React.Component {
     );
   }
 }
-// }
