@@ -70,7 +70,7 @@ export default class LogIn extends React.Component {
             alignItems: "center",
           }}
         >
-          <Card>
+          <Card containerStyle={{ borderRadius: 8 }}>
             <Input
               inputContainerStyle={{
                 height: 40,
@@ -80,6 +80,8 @@ export default class LogIn extends React.Component {
               }}
               label="Email"
               placeholder="Email"
+              autoCapitalize="none"
+              autoCorrect={false}
               onChangeText={text => this.setState({ email: text })}
               returnKeyType="next"
               onSubmitEditing={email => {

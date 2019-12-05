@@ -82,7 +82,7 @@ export default class SignUp extends React.Component {
             alignItems: "center",
           }}
         >
-          <Card>
+          <Card containerStyle={{ borderRadius: 8 }}>
             <Input
               inputContainerStyle={{
                 height: 40,
@@ -92,6 +92,7 @@ export default class SignUp extends React.Component {
               }}
               label="First Name"
               placeholder="First Name"
+              autoCorrect={false}
               onChangeText={text =>
                 this.setState({ firstName: text })
               }
@@ -111,6 +112,7 @@ export default class SignUp extends React.Component {
                 this.lastNameRef = lastNameRef;
               }}
               label="Last Name"
+              autoCorrect={false}
               placeholder="Last Name"
               onChangeText={text => this.setState({ lastName: text })}
               returnKeyType="next"
@@ -130,6 +132,7 @@ export default class SignUp extends React.Component {
               }}
               label="Email"
               placeholder="Email"
+              autoCapitalize="none"
               onChangeText={text => this.setState({ email: text })}
               returnKeyType="next"
               onSubmitEditing={email => {
@@ -166,14 +169,6 @@ export default class SignUp extends React.Component {
                 />
               )}
             </Mutation>
-            <Button
-              type="clear"
-              textStyle={{ color: "#bcbec1" }}
-              title="Log In"
-              onPress={() => {
-                this.props.navigation.navigate("LogIn");
-              }}
-            />
           </Card>
         </View>
       </KeyboardAvoidingView>
