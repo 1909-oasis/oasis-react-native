@@ -67,6 +67,7 @@ export default class ProfileScreen extends React.Component {
                   justifyContent: "flex-start",
                   alignItems: "center",
                 }}
+                titleStyle={{ color: "rgb(19,4,4)" }}
                 title={`${data.me.firstName} ${data.me.lastName}`}
               >
                 <Image
@@ -83,7 +84,11 @@ export default class ProfileScreen extends React.Component {
                     borderRadius: 200 / 2,
                   }}
                 />
-                <Text textAlign="center" fontWeight="bold">
+                <Text
+                  textAlign="center"
+                  fontWeight="bold"
+                  style={{ color: "rgb(19,4,4)" }}
+                >
                   {data.me.email}
                 </Text>
                 {/* {data.recommendationList.map(element => {
@@ -92,6 +97,7 @@ export default class ProfileScreen extends React.Component {
                 <Button
                   buttonStyle={{
                     marginTop: 20,
+                    backgroundColor: "rgb(69,211,193)",
                   }}
                   title="Log Out"
                   onPress={async () => await this._onSignOut()}

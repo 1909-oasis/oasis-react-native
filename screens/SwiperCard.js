@@ -350,11 +350,11 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   card: {
     alignItems: "center",
-    borderRadius: 5,
+    // borderRadius: 5,
     overflow: "hidden",
     borderColor: "grey",
     backgroundColor: "white",
-    borderWidth: 1,
+    // borderWidth: 1,
     elevation: 1,
   },
   thumbnail: {

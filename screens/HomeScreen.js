@@ -50,7 +50,7 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     const { navigation } = this.props;
     navigation.addListener("willFocus", () => {
-      console.log(`HIT HIT HIT HIT HIT`);
+      console.log("am I am I am  I");
       this.setState({ trial: !this.state.trial });
     });
   }
@@ -58,74 +58,71 @@ class HomeScreen extends React.Component {
   dataRecommendations(data) {
     console.log(this.state.data);
     return (
-      <View style={styles.card}>
-        <Text>
-          This is Our Recommendation!!!! {String(this.state.trial)}
+      <View>
+        <Text style={styles.recommendation}>
+          This is Our Recommendation!!!!
         </Text>
-        <View>
-          <ImageBackground
-            style={styles.thumbnail}
-            source={{ uri: data.getRecommendation.imageUrl }}
-          />
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "white",
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              fontSize: 50,
-            }}
-          >
-            {data.getRecommendation.name}
-          </Text>
+
+        <View style={styles.card}>
+          <View>
+            <ImageBackground
+              style={styles.thumbnail}
+              source={{ uri: data.getRecommendation.imageUrl }}
+            />
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: "white",
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                fontSize: 50,
+              }}
+            >
+              {data.getRecommendation.name}
+            </Text>
+          </View>
+          <View>
+            {data.getRecommendation.ingredients.map(
+              (ingredient, idx) => {
+                return (
+                  <Text style={styles.text} key={idx}>
+                    {ingredient.ingredient.name}
+                  </Text>
+                );
+              }
+            )}
+          </View>
         </View>
-        <View>
-          {data.getRecommendation.ingredients.map(
-            (ingredient, idx) => {
-              return (
-                <Text style={styles.text} key={idx}>
-                  {ingredient.ingredient.name}
-                </Text>
-              );
-            }
-          )}
-        </View>
-        <Button
-          title="hello"
-          onPress={async () => {
-            try {
-              const hello = await this.state.refetch();
-              console.log("helloooo", hello);
-              this.setState({ data: hello[0].data });
-            } catch (e) {
-              console.log(e);
-            }
-          }}
-        ></Button>
       </View>
     );
   }
   render() {
     console.log("hello render", this.state.data.getRecommendation);
     return (
-      <View>
+      <View style={styles.noMoreCards}>
         {/* {!this.state.isCached ? ( */}
         <Query query={RECOMMENDATION} fetchPolicy="no-cache">
           {({ loading, error, data, refetch }) => {
             if (loading) {
-              return <ActivityIndicator size="large" color="grey" />;
+              return (
+                <View>
+                  <ActivityIndicator
+                    size="large"
+                    color="rgb(69,211,193)"
+                  />
+                </View>
+              );
             }
             if (error)
               return <Text>Whoops! Something went wrong.</Text>;
-            {
-              console.log("this is data ----> ", data);
-            }
+
             const fetchedData = this.state.isCached
               ? this.state.data
               : data;
             return (
               <View>
+                {console.log("hi hi hi hi hi")}
                 {this.dataRecommendations(fetchedData)}
                 <Button
                   title="refresh"
@@ -143,9 +140,6 @@ class HomeScreen extends React.Component {
             );
           }}
         </Query>
-        {/* ) : (
-          this.dataRecommendations(this.state.data)
-        )} */}
       </View>
     );
   }
@@ -168,6 +162,9 @@ const styles = StyleSheet.create({
   thumbnail: {
     width: 400,
     height: 400,
+  },
+  recomendation: {
+    fontSize: 30,
   },
   text: {
     fontSize: 15,
