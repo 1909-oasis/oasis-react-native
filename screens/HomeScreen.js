@@ -99,6 +99,7 @@ class HomeScreen extends React.Component {
   render() {
     // console.log("hello render", this.state.data.getRecommendation);
     return (
+      <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
       <View style={styles.noMoreCards}>
         {/* {!this.state.isCached ? ( */}
         <Query query={RECOMMENDATION} fetchPolicy="no-cache">
@@ -132,6 +133,7 @@ class HomeScreen extends React.Component {
           }}
         </Query>
       </View>
+      </ImageBackground>
     );
   }
 }

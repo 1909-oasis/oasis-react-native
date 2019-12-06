@@ -34,17 +34,23 @@ const RECOMMENDATION = gql`
 
 function LinksScreen(props) {
   return (
+
+
     <ScrollView
       // style={styles.container}
       contentContainerStyle={{
         flex: 1,
-        padding: 15,
-        backgroundColor: "#fff",
+        // padding: 15,
+        // backgroundColor: "#fff",
         alignItems: "center",
       }}
     >
-      <SwipeCards />
+      <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
+        <SwipeCards />
+      </ImageBackground>
     </ScrollView>
+
+
   );
 }
 

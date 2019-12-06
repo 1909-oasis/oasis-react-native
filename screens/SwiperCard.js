@@ -58,13 +58,18 @@ class Card extends React.Component {
             source={{ uri: this.props.imageUrl }}
           />
         </View>
-        <View>
+        <View
+        style={{
+          backgroundColor: "rgb(242, 255, 253)",
+          opacity:.9,
+          width: "100%"
+        }}>
           <Text
             style={{
               fontWeight: "bold",
               color: "rgb(69,211,193)",
               fontSize: 25,
-              textAlign: "center",
+              textAlign: "center"
             }}
           >
             {this.props.name.toUpperCase()}
@@ -287,14 +292,14 @@ export default class App extends React.Component {
       );
     }
     return (
-      <View
-        style={{
-          flex: 1,
-          paddingVertical: 20,
-          justifyContent: "flex-start",
-          alignItems: "center",
-          opacity: 1,
-        }}
+
+      <View style=
+      {{
+            flex: 1,
+            paddingVertical: 20,
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
       >
         {/* <StarterPack /> */}
         <SwipeCards
@@ -319,19 +324,21 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   card: {
     alignItems: "center",
-    // borderRadius: 5,
+     borderRadius: 8,
     overflow: "hidden",
-    borderColor: "rgb(19,4,4)",
-    backgroundColor: "rgb(63,48,29)",
-    borderWidth: 2,
+    // borderColor: "rgb(19,4,4)",
+    // backgroundColor: "rgb(242, 255, 253)",
+    // borderWidth: 2,
     elevation: 1,
+
   },
   thumbnail: {
     width: 400,
     height: 400,
+    opacity: 1
   },
   text: {
-    color: "white",
+    color: "black",
     fontSize: 15,
     paddingTop: 5,
     paddingBottom: 5,
