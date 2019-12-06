@@ -58,9 +58,17 @@ class HomeScreen extends React.Component {
   dataRecommendations(data) {
     return (
       <View>
-        <Text style={styles.recommendation}>
-          This is Our Recommendation!!!!
-        </Text>
+        {/* <Text
+          style={{
+            color: "white",
+            fontSize: 30,
+            // paddingTop: 20,
+            // paddingBottom: 30,
+            textAlign: "left",
+          }}
+        >
+          Try a...
+        </Text> */}
 
         <View style={styles.card}>
           <View>
@@ -68,25 +76,29 @@ class HomeScreen extends React.Component {
               style={styles.thumbnail}
               source={{ uri: data.getRecommendation.imageUrl }}
             />
+          </View>
+          <View
+            style={{
+              backgroundColor: "rgb(242, 255, 253)",
+              opacity: 0.9,
+              width: "100%",
+            }}
+          >
             <Text
               style={{
                 fontWeight: "bold",
-                color: "white",
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                fontSize: 50,
+                color: "rgb(69,211,193)",
+                fontSize: 25,
+                textAlign: "center",
               }}
             >
-              {data.getRecommendation.name}
+              {data.getRecommendation.name.toUpperCase()}
             </Text>
-          </View>
-          <View>
             {data.getRecommendation.ingredients.map(
               (ingredient, idx) => {
                 return (
                   <Text style={styles.text} key={idx}>
-                    {ingredient.ingredient.name}
+                    {ingredient.ingredient.name.toLowerCase()}
                   </Text>
                 );
               }
@@ -99,44 +111,52 @@ class HomeScreen extends React.Component {
   render() {
     // console.log("hello render", this.state.data.getRecommendation);
     return (
-      <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
-      <View style={styles.noMoreCards}>
-        {/* {!this.state.isCached ? ( */}
-        <Query query={RECOMMENDATION} fetchPolicy="no-cache">
-          {({ loading, error, data, refetch }) => {
-            if (loading) {
-              return <RecLoadingScreen />;
-            }
-            if (error)
-              return <Text>Whoops! Something went wrong.</Text>;
+      <ImageBackground
+        source={require("../assets/images/Dan.jpg")}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <View style={styles.noMoreCards}>
+          {/* {!this.state.isCached ? ( */}
+          <Query query={RECOMMENDATION} fetchPolicy="no-cache">
+            {({ loading, error, data, refetch }) => {
+              if (loading) {
+                return <RecLoadingScreen />;
+              }
+              if (error)
+                return <Text>Whoops! Something went wrong.</Text>;
 
-            const fetchedData = this.state.isCached
-              ? this.state.data
-              : data;
-            return (
-              <View>
-                {this.dataRecommendations(fetchedData)}
-                <Button
-                  title="Recommendation"
-                  onPress={async () => {
-                    const refetchedData = await refetch();
-                    console.log(refetchedData);
-                    this.setState({
-                      data: refetchedData.data,
-                      isCached: true,
-                      trial: !this.state.trial,
-                    });
-                  }}
-                ></Button>
-              </View>
-            );
-          }}
-        </Query>
-      </View>
+              const fetchedData = this.state.isCached
+                ? this.state.data
+                : data;
+              return (
+                <View>
+                  {this.dataRecommendations(fetchedData)}
+                  {/* <Button
+                    title="Recommendation"
+                    onPress={async () => {
+                      const refetchedData = await refetch();
+                      console.log(refetchedData);
+                      this.setState({
+                        data: refetchedData.data,
+                        isCached: true,
+                        trial: !this.state.trial,
+                      });
+                    }}
+                  ></Button> */}
+                </View>
+              );
+            }}
+          </Query>
+        </View>
       </ImageBackground>
     );
   }
 }
+
+HomeScreen.navigationOptions = {
+  title: "Recommendation",
+};
+
 // {this.dataRecommendations(this.state.data)}
 const styles = StyleSheet.create({
   container: {
@@ -145,11 +165,11 @@ const styles = StyleSheet.create({
   },
   card: {
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 8,
     overflow: "hidden",
-    borderColor: "grey",
-    backgroundColor: "white",
-    borderWidth: 1,
+    // borderColor: "rgb(19,4,4)",
+    // backgroundColor: "rgb(242, 255, 253)",
+    // borderWidth: 2,
     elevation: 1,
   },
   thumbnail: {
@@ -160,9 +180,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   text: {
+    color: "black",
     fontSize: 15,
     paddingTop: 5,
     paddingBottom: 5,
+    textAlign: "center",
   },
   noMoreCards: {
     flex: 1,
