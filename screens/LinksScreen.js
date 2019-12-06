@@ -41,14 +41,12 @@ function LinksScreen(props) {
       contentContainerStyle={{
         flex: 1,
         // padding: 15,
-        backgroundColor: "#fff",
+        // backgroundColor: "#fff",
         alignItems: "center",
-
       }}
     >
       <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
-
-      <SwipeCards />
+        <SwipeCards />
       </ImageBackground>
     </ScrollView>
 
