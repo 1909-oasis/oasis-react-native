@@ -15,7 +15,7 @@ import {
 //Apollo client query hooks
 import gql from "graphql-tag";
 import { withApollo } from "react-apollo";
-
+import RecLoadingScreen from "../screens/RecLoadingScreen";
 import { Query } from "react-apollo";
 import { InMemoryCache } from "apollo-boost";
 const RECOMMENDATION = gql`
@@ -56,7 +56,6 @@ class HomeScreen extends React.Component {
   }
 
   dataRecommendations(data) {
-    console.log(this.state.data);
     return (
       <View>
         <Text style={styles.recommendation}>
@@ -98,21 +97,14 @@ class HomeScreen extends React.Component {
     );
   }
   render() {
-    console.log("hello render", this.state.data.getRecommendation);
+    // console.log("hello render", this.state.data.getRecommendation);
     return (
       <View style={styles.noMoreCards}>
         {/* {!this.state.isCached ? ( */}
         <Query query={RECOMMENDATION} fetchPolicy="no-cache">
           {({ loading, error, data, refetch }) => {
             if (loading) {
-              return (
-                <View>
-                  <ActivityIndicator
-                    size="large"
-                    color="rgb(69,211,193)"
-                  />
-                </View>
-              );
+              return <RecLoadingScreen />;
             }
             if (error)
               return <Text>Whoops! Something went wrong.</Text>;
