@@ -7,6 +7,7 @@ import {
   View,
   ImageBackground,
   StyleSheet,
+  Image
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 import { USER_TOKEN } from "../constants/constants";
@@ -66,6 +67,8 @@ export default class LogIn extends React.Component {
         enabled
       >
            <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
+             <Image source={require("../assets/images/LoginLogo.png")}
+             style={{width: '100%'}}/>
         <View
           style={{
             flex: 1,

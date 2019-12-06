@@ -287,7 +287,17 @@ export default class App extends React.Component {
       );
     }
     return (
-      <View>
+
+      <View style=
+      {{
+            flex: 1,
+            paddingVertical: 20,
+            justifyContent: "flex-start",
+            alignItems: "center",
+            opacity: 1,
+          }}
+
+      >
         {/* <StarterPack /> */}
         <SwipeCards
           cards={this.state.cards}

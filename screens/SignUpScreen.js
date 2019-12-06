@@ -3,7 +3,8 @@ import {
   AsyncStorage,
   KeyboardAvoidingView,
   View,
-  ImageBackground
+  ImageBackground,
+  Image
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 import gql from "graphql-tag";
@@ -76,6 +77,8 @@ export default class SignUp extends React.Component {
         enabled
       >
         <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
+        <Image source={require("../assets/images/LoginLogo.png")}
+             style={{width: '100%'}}/>
         <View
           style={{
             flex: 1,
