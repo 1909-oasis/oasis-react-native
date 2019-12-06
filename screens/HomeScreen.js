@@ -15,7 +15,7 @@ import {
 //Apollo client query hooks
 import gql from "graphql-tag";
 import { withApollo } from "react-apollo";
-
+import RecLoadingScreen from "../screens/RecLoadingScreen";
 import { Query } from "react-apollo";
 import { InMemoryCache } from "apollo-boost";
 const RECOMMENDATION = gql`
@@ -50,106 +50,113 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     const { navigation } = this.props;
     navigation.addListener("willFocus", () => {
-      console.log(`HIT HIT HIT HIT HIT`);
+      console.log("am I am I am  I");
       this.setState({ trial: !this.state.trial });
     });
   }
 
   dataRecommendations(data) {
-    console.log(this.state.data);
     return (
-      <View style={styles.card}>
-        <Text>
-          This is Our Recommendation!!!! {String(this.state.trial)}
-        </Text>
-        <View>
-          <ImageBackground
-            style={styles.thumbnail}
-            source={{ uri: data.getRecommendation.imageUrl }}
-          />
-          <Text
+      <View>
+        {/* <Text
+          style={{
+            color: "white",
+            fontSize: 30,
+            // paddingTop: 20,
+            // paddingBottom: 30,
+            textAlign: "left",
+          }}
+        >
+          Try a...
+        </Text> */}
+
+        <View style={styles.card}>
+          <View>
+            <ImageBackground
+              style={styles.thumbnail}
+              source={{ uri: data.getRecommendation.imageUrl }}
+            />
+          </View>
+          <View
             style={{
-              fontWeight: "bold",
-              color: "white",
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              fontSize: 50,
+              backgroundColor: "rgb(242, 255, 253)",
+              opacity: 0.9,
+              width: "100%",
             }}
           >
-            {data.getRecommendation.name}
-          </Text>
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: "rgb(69,211,193)",
+                fontSize: 25,
+                textAlign: "center",
+              }}
+            >
+              {data.getRecommendation.name.toUpperCase()}
+            </Text>
+            {data.getRecommendation.ingredients.map(
+              (ingredient, idx) => {
+                return (
+                  <Text style={styles.text} key={idx}>
+                    {ingredient.ingredient.name.toLowerCase()}
+                  </Text>
+                );
+              }
+            )}
+          </View>
         </View>
-        <View>
-          {data.getRecommendation.ingredients.map(
-            (ingredient, idx) => {
-              return (
-                <Text style={styles.text} key={idx}>
-                  {ingredient.ingredient.name}
-                </Text>
-              );
-            }
-          )}
-        </View>
-        <Button
-          title="hello"
-          onPress={async () => {
-            try {
-              const hello = await this.state.refetch();
-              console.log("helloooo", hello);
-              this.setState({ data: hello[0].data });
-            } catch (e) {
-              console.log(e);
-            }
-          }}
-        ></Button>
       </View>
     );
   }
   render() {
-    console.log("hello render", this.state.data.getRecommendation);
+    // console.log("hello render", this.state.data.getRecommendation);
     return (
-      <View>
-        {/* {!this.state.isCached ? ( */}
-        <Query query={RECOMMENDATION} fetchPolicy="no-cache">
-          {({ loading, error, data, refetch }) => {
-            if (loading) {
-              return <ActivityIndicator size="large" color="grey" />;
-            }
-            if (error)
-              return <Text>Whoops! Something went wrong.</Text>;
-            {
-              console.log("this is data ----> ", data);
-            }
-            const fetchedData = this.state.isCached
-              ? this.state.data
-              : data;
-            return (
-              <View>
-                {this.dataRecommendations(fetchedData)}
-                <Button
-                  title="refresh"
-                  onPress={async () => {
-                    const refetchedData = await refetch();
-                    console.log(refetchedData);
-                    this.setState({
-                      data: refetchedData.data,
-                      isCached: true,
-                      trial: !this.state.trial,
-                    });
-                  }}
-                ></Button>
-              </View>
-            );
-          }}
-        </Query>
-        {/* ) : (
-          this.dataRecommendations(this.state.data)
-        )} */}
-      </View>
+      <ImageBackground
+        source={require("../assets/images/Dan.jpg")}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <View style={styles.noMoreCards}>
+          {/* {!this.state.isCached ? ( */}
+          <Query query={RECOMMENDATION} fetchPolicy="no-cache">
+            {({ loading, error, data, refetch }) => {
+              if (loading) {
+                return <RecLoadingScreen />;
+              }
+              if (error)
+                return <Text>Whoops! Something went wrong.</Text>;
+
+              const fetchedData = this.state.isCached
+                ? this.state.data
+                : data;
+              return (
+                <View>
+                  {this.dataRecommendations(fetchedData)}
+                  {/* <Button
+                    title="Recommendation"
+                    onPress={async () => {
+                      const refetchedData = await refetch();
+                      console.log(refetchedData);
+                      this.setState({
+                        data: refetchedData.data,
+                        isCached: true,
+                        trial: !this.state.trial,
+                      });
+                    }}
+                  ></Button> */}
+                </View>
+              );
+            }}
+          </Query>
+        </View>
+      </ImageBackground>
     );
   }
 }
+
+HomeScreen.navigationOptions = {
+  title: "Recommendation",
+};
+
 // {this.dataRecommendations(this.state.data)}
 const styles = StyleSheet.create({
   container: {
@@ -158,21 +165,26 @@ const styles = StyleSheet.create({
   },
   card: {
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 8,
     overflow: "hidden",
-    borderColor: "grey",
-    backgroundColor: "white",
-    borderWidth: 1,
+    // borderColor: "rgb(19,4,4)",
+    // backgroundColor: "rgb(242, 255, 253)",
+    // borderWidth: 2,
     elevation: 1,
   },
   thumbnail: {
     width: 400,
     height: 400,
   },
+  recomendation: {
+    fontSize: 30,
+  },
   text: {
+    color: "black",
     fontSize: 15,
     paddingTop: 5,
     paddingBottom: 5,
+    textAlign: "center",
   },
   noMoreCards: {
     flex: 1,
