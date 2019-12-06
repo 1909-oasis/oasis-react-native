@@ -3,6 +3,8 @@ import {
   AsyncStorage,
   KeyboardAvoidingView,
   View,
+  ImageBackground,
+  Image
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 import gql from "graphql-tag";
@@ -74,15 +76,19 @@ export default class SignUp extends React.Component {
         behavior="padding"
         enabled
       >
+        <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
+        <Image source={require("../assets/images/LoginLogo.png")}
+             style={{width: '100%'}}/>
         <View
           style={{
             flex: 1,
             paddingVertical: 20,
             justifyContent: "flex-start",
             alignItems: "center",
+            opacity: .9
           }}
         >
-          <Card>
+          <Card containerStyle={{ borderRadius: 8 }}>
             <Input
               inputContainerStyle={{
                 height: 40,
@@ -93,6 +99,7 @@ export default class SignUp extends React.Component {
               label="First Name"
               labelStyle={{ color: "rgb(19,4,4)" }}
               placeholder="First Name"
+              autoCorrect={false}
               onChangeText={text =>
                 this.setState({ firstName: text })
               }
@@ -112,6 +119,7 @@ export default class SignUp extends React.Component {
                 this.lastNameRef = lastNameRef;
               }}
               label="Last Name"
+              autoCorrect={false}
               labelStyle={{ color: "rgb(19,4,4)" }}
               placeholder="Last Name"
               onChangeText={text => this.setState({ lastName: text })}
@@ -133,6 +141,7 @@ export default class SignUp extends React.Component {
               label="Email"
               labelStyle={{ color: "rgb(19,4,4)" }}
               placeholder="Email"
+              autoCapitalize="none"
               onChangeText={text => this.setState({ email: text })}
               returnKeyType="next"
               onSubmitEditing={email => {
@@ -173,17 +182,9 @@ export default class SignUp extends React.Component {
                 />
               )}
             </Mutation>
-            <Button
-              type="clear"
-              textStyle={{ color: "#bcbec1" }}
-              titleStyle={{ color: "rgb(69,211,193)" }}
-              title="Log In"
-              onPress={() => {
-                this.props.navigation.navigate("LogIn");
-              }}
-            />
           </Card>
         </View>
+        </ImageBackground>
       </KeyboardAvoidingView>
     );
   }

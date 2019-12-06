@@ -122,10 +122,9 @@ class HomeScreen extends React.Component {
               : data;
             return (
               <View>
-                {console.log("hi hi hi hi hi")}
                 {this.dataRecommendations(fetchedData)}
                 <Button
-                  title="refresh"
+                  title="Recommendation"
                   onPress={async () => {
                     const refetchedData = await refetch();
                     console.log(refetchedData);

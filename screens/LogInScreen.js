@@ -5,7 +5,9 @@ import {
   AsyncStorage,
   KeyboardAvoidingView,
   View,
+  ImageBackground,
   StyleSheet,
+  Image
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
 import { USER_TOKEN } from "../constants/constants";
@@ -58,20 +60,25 @@ export default class LogIn extends React.Component {
   render() {
     const { email, password } = this.state;
     return (
+
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior="padding"
         enabled
       >
+           <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
+             <Image source={require("../assets/images/LoginLogo.png")}
+             style={{width: '100%'}}/>
         <View
           style={{
             flex: 1,
             paddingVertical: 20,
             justifyContent: "flex-start",
             alignItems: "center",
+            opacity: .9
           }}
         >
-          <Card>
+          <Card containerStyle={{ borderRadius: 8 }}>
             <Input
               inputContainerStyle={{
                 height: 40,
@@ -82,6 +89,8 @@ export default class LogIn extends React.Component {
               label="Email"
               labelStyle={{ color: "rgb(19,4,4)" }}
               placeholder="Email"
+              autoCapitalize="none"
+              autoCorrect={false}
               onChangeText={text => this.setState({ email: text })}
               returnKeyType="next"
               onSubmitEditing={email => {
@@ -131,7 +140,9 @@ export default class LogIn extends React.Component {
             />
           </Card>
         </View>
+        </ImageBackground>
       </KeyboardAvoidingView>
+
     );
   }
 }

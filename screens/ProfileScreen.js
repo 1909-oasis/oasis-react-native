@@ -1,6 +1,12 @@
 import React from "react";
-import { AsyncStorage, Image, View, Text } from "react-native";
-import { Button, Card } from "react-native-elements";
+import {
+  AsyncStorage,
+  Image,
+  View,
+  Text,
+  ImageBackground,
+} from "react-native";
+import { Button, Card, colors } from "react-native-elements";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import { USER_TOKEN } from "../constants/constants";
@@ -51,59 +57,73 @@ export default class ProfileScreen extends React.Component {
             return <Text>Whoops! Something went wrong.</Text>;
           }
           console.log(data);
+
           return (
-            <View
-              style={{
-                flex: 1,
-                paddingVertical: 20,
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
+            <ImageBackground
+              source={require("../assets/images/Dan.jpg")}
+              style={{ width: "100%", height: "100%" }}
             >
-              <Card
-                containerStyle={{
-                  width: 350,
+              <View
+                style={{
                   flex: 1,
-                  justifyContent: "flex-start",
+                  flexDirection: "column",
+                  paddingVertical: 20,
+                  justifyContent: "center",
                   alignItems: "center",
+                  opacity: 0.95,
+                  // backgroundColor: "rgb(69,211,193)",
                 }}
-                titleStyle={{ color: "rgb(19,4,4)" }}
-                title={`${data.me.firstName} ${data.me.lastName}`}
               >
-                <Image
-                  source={{
-                    // This is just a placeholder profile picture for now.
-                    // If we want to later implement a user image, we need to include this in our schema on the backend.
-                    uri:
-                      "https://advanceddentalhealthcenter.com/wp-content/uploads/2019/05/person-placeholder.jpg",
+                <Card
+                  containerStyle={{
+                    width: 350,
+                    flex: 1,
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    borderRadius: 8,
+                    backgroundColor: "rgb(242, 255, 253)",
                   }}
-                  // This makes the image round.
-                  style={{
-                    width: 200,
-                    height: 200,
-                    borderRadius: 200 / 2,
+                  wrapperStyle={{
+                    alignItems: "center",
+                    justifyContent: "space-around",
                   }}
-                />
-                <Text
-                  textAlign="center"
-                  fontWeight="bold"
-                  style={{ color: "rgb(19,4,4)" }}
+                  title={`${data.me.firstName} ${data.me.lastName}`}
                 >
-                  {data.me.email}
-                </Text>
-                {/* {data.recommendationList.map(element => {
-              <Text key={element.cocktail.id}>{element.cocktail.name}</Text>;
-            })} */}
-                <Button
-                  buttonStyle={{
-                    marginTop: 20,
-                    backgroundColor: "rgb(69,211,193)",
-                  }}
-                  title="Log Out"
-                  onPress={async () => await this._onSignOut()}
-                />
-              </Card>
-            </View>
+                  <Image
+                    source={{
+                      // This is just a placeholder profile picture for now.
+                      // If we want to later implement a user image, we need to include this in our schema on the backend.
+                      uri:
+                        "https://advanceddentalhealthcenter.com/wp-content/uploads/2019/05/person-placeholder.jpg",
+                    }}
+                    // This makes the image round.
+                    style={{
+                      width: 200,
+                      height: 200,
+                      borderRadius: 200 / 2,
+                    }}
+                  />
+                  <Text
+                    textAlign="center"
+                    fontWeight="bold"
+                    width="0px"
+                  >
+                    {data.me.email}
+                  </Text>
+                  {/* {data.recommendationList.map(element => {
+                <Text key={element.cocktail.id}>{element.cocktail.name}</Text>;
+              })} */}
+                  <Button
+                    buttonStyle={{
+                      marginTop: 20,
+                      backgroundColor: "rgb(69,211,193)",
+                    }}
+                    title="Log Out"
+                    onPress={async () => await this._onSignOut()}
+                  />
+                </Card>
+              </View>
+            </ImageBackground>
           );
         }}
       </Query>

@@ -9,6 +9,7 @@ import {
   ImageBackground,
   ScrollView,
   AsyncStorage,
+  ActivityIndicator,
 } from "react-native";
 
 //Apollo client query hooks
@@ -43,43 +44,6 @@ const QUEUE_QUERY = gql`
   }
 `;
 
-// const query = gql`
-//   query {
-//     cocktailStarter(starterPack: true) {
-//       id
-//       name
-//       imageUrl
-//       ingredients {
-//         ingredient {
-//           id
-//           name
-//         }
-//       }
-//     }
-//   }
-// `;
-//component to make a call to DB through apollo client and load up to
-
-// class StarterPack extends React.Component {
-//   render() {
-//     return (
-//       <Query query={query}>
-//         {(response, error) => {
-//           if (error) {
-//             return <Text>{error}</Text>;
-//           }
-
-//           if (response) {
-//             console.log("are we hitting this");
-//             return response.data.cocktailStarter.map((element, idx) => {
-//               cards.push(element);
-//             });
-//           }
-//         }}
-//       </Query>
-//     );
-//   }
-// }
 class Card extends React.Component {
   constructor(props) {
     super(props);
@@ -93,24 +57,22 @@ class Card extends React.Component {
             style={styles.thumbnail}
             source={{ uri: this.props.imageUrl }}
           />
+        </View>
+        <View>
           <Text
             style={{
               fontWeight: "bold",
-              color: "white",
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              fontSize: 50,
+              color: "rgb(69,211,193)",
+              fontSize: 25,
+              textAlign: "center",
             }}
           >
-            {this.props.name}
+            {this.props.name.toUpperCase()}
           </Text>
-        </View>
-        <View>
           {this.props.ingredients.map((ingredient, idx) => {
             return (
               <Text style={styles.text} key={idx}>
-                {ingredient.ingredient.name}
+                {ingredient.ingredient.name.toLowerCase()}
               </Text>
             );
           })}
@@ -135,11 +97,7 @@ class NoMoreCards extends React.Component {
 }
 
 async function handleSwipe(cocktailId, rating, token) {
-  console.log("token:, ", token);
-  console.log("token type:, ", typeof token);
-  console.log("in yup");
-
-  fetch("http://oasis1909.herokuapp.com/", {
+  fetch("http://localhost:4000/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -160,12 +118,8 @@ async function handleSwipe(cocktailId, rating, token) {
   });
 }
 
-async function handleMaybe() {
-  console.log("token:, ", token);
-  console.log("token type:, ", typeof token);
-  console.log("in yup");
-
-  return await fetch("http://oasis1909.herokuapp.com/", {
+async function handleMaybe(token) {
+  return await fetch("http://localhost:4000/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -185,7 +139,7 @@ async function handleMaybe() {
 }
 
 async function refreshQueue(token) {
-  return await fetch("http://oasis1909.herokuapp.com/", {
+  const response = await fetch("http://localhost:4000/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -195,26 +149,28 @@ async function refreshQueue(token) {
       query: `
         mutation{
           updateQueue{
-          queue{
+            id
+            queue{
             id
             name
             imageUrl
+            ingredients{
+              ingredient{
+                id
+                name
+              }
+            }
           }
         }
         }`,
     }),
-  }).then(data => {
-    if (data.updateQueue.queue) {
-      this.setState({
-        cards: data.updateQueue.queue,
-        outOfCards: false,
-      });
-    } else {
-      this.setState({
-        outOfCards: true,
-      });
-    }
   });
+  const json = await response.json();
+  return json.data.updateQueue.queue;
+}
+
+function shuffleQueue(queue) {
+  queue.sort(() => Math.random() - 0.5);
 }
 
 export default class App extends React.Component {
@@ -229,7 +185,6 @@ export default class App extends React.Component {
     this.handleYup = this.handleYup.bind(this);
     this.handleNope = this.handleNope.bind(this);
     this.handleMaybe = this.handleMaybe.bind(this);
-    console.log("in constructor, this.props:, ", props);
   }
 
   async componentDidMount() {
@@ -237,28 +192,22 @@ export default class App extends React.Component {
     this.setState({
       token,
     });
-    console.log("in componentDidMount. Token: ", token);
     return;
   }
 
   handleYup(card) {
-    console.log("yup");
     handleSwipe(card.id, 1, this.state.token);
   }
 
   handleNope(card) {
-    console.log("nope");
     handleSwipe(card.id, -1, this.state.token);
   }
 
   handleMaybe(card) {
-    console.log("maybe");
-    handleMaybe();
+    handleMaybe(this.state.token);
   }
 
-  cardRemoved(index) {
-    console.log(`The index is ${index}`);
-
+  async cardRemoved(index) {
     let CARD_REFRESH_LIMIT = 3;
 
     if (this.state.cards.length - index <= CARD_REFRESH_LIMIT + 1) {
@@ -271,10 +220,11 @@ export default class App extends React.Component {
       //TODO add refresh logic here and put the queue on state again
 
       if (!this.state.outOfCards) {
-        const data = refreshQueue(this.state.token);
-        if (data.updateQueue.queue) {
-          this.setState({
-            cards: data.updateQueue.queue,
+        const queue = await refreshQueue(this.state.token);
+        shuffleQueue(queue);
+        if (queue) {
+          await this.setState({
+            cards: queue,
             outOfCards: false,
           });
         } else {
@@ -287,6 +237,7 @@ export default class App extends React.Component {
   }
 
   handleQueryComplete = cocktails => {
+    shuffleQueue(cocktails);
     this.setState({
       cards: cocktails,
     });
@@ -295,38 +246,56 @@ export default class App extends React.Component {
   render() {
     if (!this.state.cards.length) {
       return (
-        <Query query={QUEUE_QUERY} fetchPolicy="network-only">
-          {({ loading, error, data }) => {
-            if (loading) return <Text>Loading Profile!</Text>;
-            if (error)
-              return <Text>Whoops! Something went wrong.</Text>;
-            const cocktailCards = data.me.queue;
-            this.handleQueryComplete(cocktailCards);
-            return (
-              <View>
-                {/* <StarterPack /> */}
-                <SwipeCards
-                  cards={this.state.cards}
-                  loop={false}
-                  renderCard={cardData => <Card {...cardData} />}
-                  renderNoMoreCards={() => <NoMoreCards />}
-                  showYup={false}
-                  showNope={false}
-                  showMaybe={false}
-                  hasMaybeAction={true}
-                  handleYup={this.handleYup}
-                  handleNope={this.handleNope}
-                  handleMaybe={this.handleMaybe}
-                  cardRemoved={this.cardRemoved.bind(this)}
-                />
-              </View>
-            );
-          }}
-        </Query>
+        <View style={styles.noMoreCards}>
+          <Query query={QUEUE_QUERY} fetchPolicy="network-only">
+            {({ loading, error, data }) => {
+              if (loading)
+                return (
+                  <View style={{ alignContent: "center" }}>
+                    <ActivityIndicator
+                      size="large"
+                      color="rgb(69,211,193)"
+                    />
+                  </View>
+                );
+              if (error)
+                return <Text>Whoops! Something went wrong.</Text>;
+              const cocktailCards = data.me.queue;
+              this.handleQueryComplete(cocktailCards);
+              return (
+                <View>
+                  {/* <StarterPack /> */}
+                  <SwipeCards
+                    cards={this.state.cards}
+                    loop={false}
+                    renderCard={cardData => <Card {...cardData} />}
+                    renderNoMoreCards={() => <NoMoreCards />}
+                    showYup={false}
+                    showNope={false}
+                    showMaybe={false}
+                    hasMaybeAction={true}
+                    handleYup={this.handleYup}
+                    handleNope={this.handleNope}
+                    handleMaybe={this.handleMaybe}
+                    cardRemoved={this.cardRemoved.bind(this)}
+                  />
+                </View>
+              );
+            }}
+          </Query>
+        </View>
       );
     }
     return (
-      <View>
+      <View
+        style={{
+          flex: 1,
+          paddingVertical: 20,
+          justifyContent: "flex-start",
+          alignItems: "center",
+          opacity: 1,
+        }}
+      >
         {/* <StarterPack /> */}
         <SwipeCards
           cards={this.state.cards}
@@ -352,9 +321,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // borderRadius: 5,
     overflow: "hidden",
-    borderColor: "grey",
-    backgroundColor: "white",
-    // borderWidth: 1,
+    borderColor: "rgb(19,4,4)",
+    backgroundColor: "rgb(63,48,29)",
+    borderWidth: 2,
     elevation: 1,
   },
   thumbnail: {
@@ -362,9 +331,11 @@ const styles = StyleSheet.create({
     height: 400,
   },
   text: {
+    color: "white",
     fontSize: 15,
     paddingTop: 5,
     paddingBottom: 5,
+    textAlign: "center",
   },
   noMoreCards: {
     flex: 1,
