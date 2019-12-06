@@ -64,7 +64,7 @@ class Card extends React.Component {
               fontWeight: "bold",
               color: "rgb(69,211,193)",
               fontSize: 25,
-              textAlign: "center",
+              textAlign: "center"
             }}
           >
             {this.props.name.toUpperCase()}
@@ -288,13 +288,13 @@ export default class App extends React.Component {
     }
     return (
 
+
       <View style=
       {{
             flex: 1,
             paddingVertical: 20,
             justifyContent: "flex-start",
             alignItems: "center",
-            opacity: 1,
           }}
 
       >
