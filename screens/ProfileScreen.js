@@ -44,6 +44,10 @@ export default class ProfileScreen extends React.Component {
 
   render() {
     return (
+      <ImageBackground
+      source={require("../assets/images/Dan.jpg")}
+      style={{ width: "100%", height: "100%" }}
+    >
       <Query
         query={QUERY}
         fetchPolicy="network-only" // Without the fetchPolicy, this returns the cached profile.
@@ -59,10 +63,7 @@ export default class ProfileScreen extends React.Component {
           console.log(data);
 
           return (
-            <ImageBackground
-              source={require("../assets/images/Dan.jpg")}
-              style={{ width: "100%", height: "100%" }}
-            >
+
               <View
                 style={{
                   flex: 1,
@@ -123,10 +124,11 @@ export default class ProfileScreen extends React.Component {
                   />
                 </Card>
               </View>
-            </ImageBackground>
+
           );
         }}
       </Query>
+      </ImageBackground>
     );
   }
 }
