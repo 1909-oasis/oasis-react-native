@@ -288,7 +288,6 @@ export default class App extends React.Component {
     }
     return (
 
-
       <View style=
       {{
             flex: 1,
@@ -296,7 +295,6 @@ export default class App extends React.Component {
             justifyContent: "flex-start",
             alignItems: "center",
           }}
-
       >
         {/* <StarterPack /> */}
         <SwipeCards
@@ -321,7 +319,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   card: {
     alignItems: "center",
-    borderRadius: 5,
+    // borderRadius: 5,
     overflow: "hidden",
     borderColor: "rgb(19,4,4)",
     backgroundColor: "rgb(63,48,29)",

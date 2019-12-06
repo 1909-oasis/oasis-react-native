@@ -1,5 +1,11 @@
 import React from "react";
-import { AsyncStorage, Image, View, Text, ImageBackground } from "react-native";
+import {
+  AsyncStorage,
+  Image,
+  View,
+  Text,
+  ImageBackground,
+} from "react-native";
 import { Button, Card, colors } from "react-native-elements";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
@@ -53,8 +59,10 @@ export default class ProfileScreen extends React.Component {
           console.log(data);
 
           return (
-
-            <ImageBackground source={require("../assets/images/Dan.jpg")} style={{width: '100%', height: '100%'}}>
+            <ImageBackground
+              source={require("../assets/images/Dan.jpg")}
+              style={{ width: "100%", height: "100%" }}
+            >
               <View
                 style={{
                   flex: 1,
@@ -62,11 +70,10 @@ export default class ProfileScreen extends React.Component {
                   paddingVertical: 20,
                   justifyContent: "center",
                   alignItems: "center",
-                  opacity: .95,
+                  opacity: 0.95,
                   // backgroundColor: "rgb(69,211,193)",
                 }}
               >
-
                 <Card
                   containerStyle={{
                     width: 350,
@@ -80,10 +87,8 @@ export default class ProfileScreen extends React.Component {
                     alignItems: "center",
                     justifyContent: "space-around",
                   }}
-
                   title={`${data.me.firstName} ${data.me.lastName}`}
                 >
-
                   <Image
                     source={{
                       // This is just a placeholder profile picture for now.
@@ -98,7 +103,11 @@ export default class ProfileScreen extends React.Component {
                       borderRadius: 200 / 2,
                     }}
                   />
-                  <Text textAlign="center" fontWeight="bold" width="0px">
+                  <Text
+                    textAlign="center"
+                    fontWeight="bold"
+                    width="0px"
+                  >
                     {data.me.email}
                   </Text>
                   {/* {data.recommendationList.map(element => {
@@ -112,9 +121,7 @@ export default class ProfileScreen extends React.Component {
                     title="Log Out"
                     onPress={async () => await this._onSignOut()}
                   />
-
                 </Card>
-
               </View>
             </ImageBackground>
           );
