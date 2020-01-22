@@ -50,7 +50,6 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     const { navigation } = this.props;
     navigation.addListener("willFocus", () => {
-      console.log("am I am I am  I");
       this.setState({ trial: !this.state.trial });
     });
   }
@@ -109,7 +108,6 @@ class HomeScreen extends React.Component {
     );
   }
   render() {
-    // console.log("hello render", this.state.data.getRecommendation);
     return (
       <ImageBackground
         source={require("../assets/images/Dan.jpg")}

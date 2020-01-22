@@ -1,14 +1,9 @@
 import React from "react";
 import {
-  ScrollView,
-  StyleSheet,
-  FlatList,
   Text,
   Image,
   ImageBackground,
   View,
-  Button,
-  ActivityIndicator,
 } from "react-native";
 
 function LoadingScreen(props) {

@@ -10,35 +10,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 
-//Apollo client query hooks
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
 import { USER_TOKEN } from "../constants/constants.js";
 
-//Schema for apollo client
-
-const QUEUE_QUERY = gql`
-  query {
-    me {
-      firstName
-      lastName
-      email
-      id
-      queue {
-        id
-        name
-        imageUrl
-        ingredients {
-          ingredient {
-            id
-            name
-          }
-        }
-      }
-    }
-  }
-`;
 
 async function loadQueue(token) {
   const response = await fetch("http://localhost:4000/", {
@@ -153,7 +127,7 @@ function shuffleQueue(queue) {
   queue.sort(() => Math.random() - 0.5);
 }
 
-export default class App extends React.Component {
+export default class Swiper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -171,20 +145,20 @@ export default class App extends React.Component {
   async componentDidMount() {
 
     const token = await AsyncStorage.getItem(USER_TOKEN);
-    this.setState({
-      token,
-    });
 
+    //load queue and set it to state
     const queue = await loadQueue(token);
     shuffleQueue(queue);
     if (queue) {
       await this.setState({
         cards: queue,
         outOfCards: false,
+        token
       });
     } else {
       this.setState({
         outOfCards: true,
+        token
       });
     }
     return;
@@ -202,17 +176,16 @@ export default class App extends React.Component {
     handleMaybe(this.state.token);
   }
 
+  //callback fired every time a card is dropped
   async cardRemoved(index) {
     let CARD_REFRESH_LIMIT = 3;
 
     if (this.state.cards.length - index <= CARD_REFRESH_LIMIT + 1) {
-      console.log(
-        `There are only ${this.state.cards.length -
-          index -
-          1} cards left.`
-      );
-
-      //TODO add refresh logic here and put the queue on state again
+      // console.log(
+      //   `There are only ${this.state.cards.length -
+      //     index -
+      //     1} cards left.`
+      // );
 
       if (!this.state.outOfCards) {
         const queue = await refreshQueue(this.state.token);
@@ -253,6 +226,7 @@ export default class App extends React.Component {
     </View>
       );
     }
+    //if the queue is loaded (there are cards on state), show the deck and allow swiping.
     return (
       <View style=
       {{
@@ -287,9 +261,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
      borderRadius: 8,
     overflow: "hidden",
-    // borderColor: "rgb(19,4,4)",
-    // backgroundColor: "rgb(242, 255, 253)",
-    // borderWidth: 2,
     elevation: 1,
 
   },
