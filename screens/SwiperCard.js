@@ -5,9 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   ImageBackground,
-  ScrollView,
   AsyncStorage,
   ActivityIndicator,
 } from "react-native";
@@ -17,8 +15,6 @@ import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import SwipeCards from "react-native-swipe-cards";
 import { USER_TOKEN } from "../constants/constants.js";
-
-const { createApolloFetch } = require("apollo-fetch");
 
 //Schema for apollo client
 

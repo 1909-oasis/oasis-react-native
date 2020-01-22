@@ -7,6 +7,7 @@ import {
   View,
   ImageBackground,
   StyleSheet,
+  ScrollView,
   Image,
 } from "react-native";
 import { Button, Card, Input } from "react-native-elements";
@@ -60,22 +61,27 @@ export default class LogIn extends React.Component {
   render() {
     const { email, password } = this.state;
     return (
+
+      <ImageBackground
+      source={require("../assets/images/Dan.jpg")}
+      style={{ width: "100%", height: "100%" }}
+    >
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+
         behavior="padding"
         enabled
       >
-        <ImageBackground
-          source={require("../assets/images/Dan.jpg")}
-          style={{ width: "100%", height: "100%" }}
-        >
+        <ScrollView>
+
           <Image
             source={require("../assets/images/LoginLogo.png")}
-            style={{ width: "100%" }}
+            style={{
+
+              width: "100%" }}
           />
           <View
             style={{
-              flex: 1,
+
               paddingVertical: 20,
               justifyContent: "flex-start",
               alignItems: "center",
@@ -148,14 +154,9 @@ export default class LogIn extends React.Component {
               />
             </Card>
           </View>
-        </ImageBackground>
+          </ScrollView>
       </KeyboardAvoidingView>
+      </ImageBackground>
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//     formText: {
-
-//     }
-// })

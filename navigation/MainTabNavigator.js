@@ -7,7 +7,7 @@ import {
 
 import TabBarIcon from "../components/TabBarIcon";
 import HomeScreen from "../screens/HomeScreen";
-import LinksScreen from "../screens/LinksScreen";
+import SwipeScreen from "../screens/SwipeScreen ";
 import ProfileScreen from "../screens/ProfileScreen";
 
 const config = Platform.select({
@@ -15,14 +15,14 @@ const config = Platform.select({
   default: {},
 });
 
-const LinksStack = createStackNavigator(
+const SwipeStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Swipes: SwipeScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
+SwipeStack.navigationOptions = {
   tabBarLabel: "Swipe",
   tabBarIcon: () => (
     <TabBarIcon
@@ -35,7 +35,7 @@ LinksStack.navigationOptions = {
   },
 };
 
-LinksStack.path = "";
+SwipeStack.path = "";
 
 const HomeStack = createStackNavigator(
   {
@@ -84,10 +84,10 @@ ProfileStack.path = "";
 const tabNavigator = createBottomTabNavigator(
   {
     HomeStack,
-    LinksStack,
+    SwipeStack,
     ProfileStack,
   },
-  { initialRouteName: "LinksStack" }
+  { initialRouteName: "SwipeStack" }
 );
 
 tabNavigator.path = "";
