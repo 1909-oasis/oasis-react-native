@@ -13,9 +13,11 @@ import {
 import SwipeCards from "react-native-swipe-cards";
 import { USER_TOKEN } from "../constants/constants.js";
 
+const HTTP_URL = "http://oasis1909.herokuapp.com/"
+
 
 async function loadQueue(token) {
-  const response = await fetch("http://localhost:4000/", {
+  const response = await fetch(HTTP_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -51,7 +53,7 @@ async function loadQueue(token) {
 
 
 async function handleSwipe(cocktailId, rating, token) {
-  fetch("http://localhost:4000/", {
+  fetch(HTTP_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -73,7 +75,7 @@ async function handleSwipe(cocktailId, rating, token) {
 }
 
 async function handleMaybe(token) {
-  return await fetch("http://localhost:4000/", {
+  return await fetch(HTTP_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -93,7 +95,7 @@ async function handleMaybe(token) {
 }
 
 async function refreshQueue(token) {
-  const response = await fetch("http://localhost:4000/", {
+  const response = await fetch(HTTP_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
