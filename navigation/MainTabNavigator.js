@@ -6,8 +6,8 @@ import {
 } from "react-navigation";
 
 import TabBarIcon from "../components/TabBarIcon";
-import HomeScreen from "../screens/HomeScreen";
-import LinksScreen from "../screens/LinksScreen";
+import RecScreen from "../screens/RecScreen";
+import SwipeScreen from "../screens/SwipeScreen ";
 import ProfileScreen from "../screens/ProfileScreen";
 
 const config = Platform.select({
@@ -15,14 +15,14 @@ const config = Platform.select({
   default: {},
 });
 
-const LinksStack = createStackNavigator(
+const SwipeStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Swipes: SwipeScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
+SwipeStack.navigationOptions = {
   tabBarLabel: "Swipe",
   tabBarIcon: () => (
     <TabBarIcon
@@ -35,16 +35,16 @@ LinksStack.navigationOptions = {
   },
 };
 
-LinksStack.path = "";
+SwipeStack.path = "";
 
-const HomeStack = createStackNavigator(
+const RecStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    Rec: RecScreen,
   },
   config
 );
 
-HomeStack.navigationOptions = {
+RecStack.navigationOptions = {
   tabBarLabel: "GetMyRec",
   tabBarIcon: () => (
     <TabBarIcon
@@ -57,7 +57,7 @@ HomeStack.navigationOptions = {
   },
 };
 
-HomeStack.path = "";
+RecStack.path = "";
 
 const ProfileStack = createStackNavigator(
   {
@@ -83,11 +83,11 @@ ProfileStack.path = "";
 
 const tabNavigator = createBottomTabNavigator(
   {
-    HomeStack,
-    LinksStack,
+    RecStack,
+    SwipeStack,
     ProfileStack,
   },
-  { initialRouteName: "LinksStack" }
+  { initialRouteName: "SwipeStack" }
 );
 
 tabNavigator.path = "";

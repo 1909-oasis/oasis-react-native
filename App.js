@@ -26,12 +26,11 @@ import { USER_TOKEN } from "./constants/constants";
 export default function App(props) {
   // Apollo Client
   const httpLink = createHttpLink({
-    // uri: "http://oasis1909.herokuapp.com/",
-    uri: "http://localhost:4000/",
-    // uri: "http://oasis1909.herokuapp.com/",
+    uri: "http://oasis1909.herokuapp.com/",
+    // uri: "http://localhost:4000/",
   });
 
-  // This middleware get the authentication token from AsyncStorage if it exists.
+  // This middleware gets the authentication token from AsyncStorage if it exists.
   // This middleware will be invoked every time ApolloClient sends a request to the server (as seen below).
   const authLink = setContext(async (_, { headers }) => {
     const token = await AsyncStorage.getItem(USER_TOKEN);
@@ -71,42 +70,6 @@ export default function App(props) {
     cache: new InMemoryCache(),
   });
 
-  // client.query({
-  //   query: gql`
-  //     {
-  //       cocktailStarter(starterPack: true) {
-  //         id
-  //         name
-  //         imageUrl
-  //         ingredients {
-  //           ingredient {
-  //             id
-  //             name
-  //           }
-  //         }
-  //       }
-
-  //       me {
-  //         firstName
-  //         lastName
-  //         email
-  //         id
-  //         queue {
-  //           id
-  //           name
-  //           imageUrl
-  //           ingredients {
-  //             ingredient {
-  //               id
-  //               name
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   `,
-  // });
-
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
@@ -132,14 +95,10 @@ export default function App(props) {
 
 async function loadResourcesAsync() {
   await Promise.all([
-    Asset.loadAsync([
-      require("./assets/images/robot-dev.png"),
-      require("./assets/images/robot-prod.png"),
-    ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
-      // We include SpaceMono because we use it in HomeScreen.js. Feel free to
+      // We include SpaceMono because we use it in RecScreen.js. Feel free to
       // remove this if you are not using it in your app
       "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
     }),
