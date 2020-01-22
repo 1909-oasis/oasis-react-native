@@ -1,23 +1,18 @@
 import * as WebBrowser from "expo-web-browser";
 import React from "react";
 import {
-  Image,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-  ActivityIndicator,
   ImageBackground,
-  Button,
 } from "react-native";
 //Apollo client query hooks
 import gql from "graphql-tag";
 import { withApollo } from "react-apollo";
-import RecLoadingScreen from "../screens/RecLoadingScreen";
+import RecLoadingScreen from "./RecLoadingScreen";
 import { Query } from "react-apollo";
-import { InMemoryCache } from "apollo-boost";
+
 const RECOMMENDATION = gql`
   query {
     getRecommendation {
@@ -34,7 +29,7 @@ const RECOMMENDATION = gql`
   }
 `;
 
-class HomeScreen extends React.Component {
+class RecScreen extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -151,7 +146,7 @@ class HomeScreen extends React.Component {
   }
 }
 
-HomeScreen.navigationOptions = {
+RecScreen.navigationOptions = {
   title: "Recommendation",
 };
 
@@ -273,4 +268,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withApollo(HomeScreen);
+export default withApollo(RecScreen);

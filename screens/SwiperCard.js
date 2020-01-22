@@ -13,6 +13,7 @@ import {
 import SwipeCards from "react-native-swipe-cards";
 import { USER_TOKEN } from "../constants/constants.js";
 
+// const HTTP_URL = "http://localhost:4000/"
 const HTTP_URL = "http://oasis1909.herokuapp.com/"
 
 

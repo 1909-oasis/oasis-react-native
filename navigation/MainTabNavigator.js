@@ -6,7 +6,7 @@ import {
 } from "react-navigation";
 
 import TabBarIcon from "../components/TabBarIcon";
-import HomeScreen from "../screens/HomeScreen";
+import RecScreen from "../screens/RecScreen";
 import SwipeScreen from "../screens/SwipeScreen ";
 import ProfileScreen from "../screens/ProfileScreen";
 
@@ -37,14 +37,14 @@ SwipeStack.navigationOptions = {
 
 SwipeStack.path = "";
 
-const HomeStack = createStackNavigator(
+const RecStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    Rec: RecScreen,
   },
   config
 );
 
-HomeStack.navigationOptions = {
+RecStack.navigationOptions = {
   tabBarLabel: "GetMyRec",
   tabBarIcon: () => (
     <TabBarIcon
@@ -57,7 +57,7 @@ HomeStack.navigationOptions = {
   },
 };
 
-HomeStack.path = "";
+RecStack.path = "";
 
 const ProfileStack = createStackNavigator(
   {
@@ -83,7 +83,7 @@ ProfileStack.path = "";
 
 const tabNavigator = createBottomTabNavigator(
   {
-    HomeStack,
+    RecStack,
     SwipeStack,
     ProfileStack,
   },
