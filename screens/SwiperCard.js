@@ -40,62 +40,41 @@ const QUEUE_QUERY = gql`
   }
 `;
 
-class Card extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <View style={styles.card}>
-        <View>
-          <ImageBackground
-            style={styles.thumbnail}
-            source={{ uri: this.props.imageUrl }}
-          />
-        </View>
-        <View
-        style={{
-          backgroundColor: "rgb(242, 255, 253)",
-          opacity:.9,
-          width: "100%"
-        }}>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "rgb(69,211,193)",
-              fontSize: 25,
-              textAlign: "center"
-            }}
-          >
-            {this.props.name.toUpperCase()}
-          </Text>
-          {this.props.ingredients.map((ingredient, idx) => {
-            return (
-              <Text style={styles.text} key={idx}>
-                {ingredient.ingredient.name.toLowerCase()}
-              </Text>
-            );
-          })}
-        </View>
-      </View>
-    );
-  }
+async function loadQueue(token) {
+  const response = await fetch("http://localhost:4000/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      query: `
+      query {
+        me {
+          firstName
+          lastName
+          email
+          id
+          queue {
+            id
+            name
+            imageUrl
+            ingredients {
+              ingredient {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    `,
+    }),
+  });
+  const json = await response.json();
+  return json.data.me.queue;
 }
 
-class NoMoreCards extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <View style={styles.noMoreCards}>
-        <Text>No more cards</Text>
-      </View>
-    );
-  }
-}
 
 async function handleSwipe(cocktailId, rating, token) {
   fetch("http://localhost:4000/", {
@@ -188,11 +167,26 @@ export default class App extends React.Component {
     this.handleMaybe = this.handleMaybe.bind(this);
   }
 
+  //Get the user token from async storage and use it to load the queue.
   async componentDidMount() {
+
     const token = await AsyncStorage.getItem(USER_TOKEN);
     this.setState({
       token,
     });
+
+    const queue = await loadQueue(token);
+    shuffleQueue(queue);
+    if (queue) {
+      await this.setState({
+        cards: queue,
+        outOfCards: false,
+      });
+    } else {
+      this.setState({
+        outOfCards: true,
+      });
+    }
     return;
   }
 
@@ -245,50 +239,21 @@ export default class App extends React.Component {
   };
 
   render() {
+
+    //If the queue isn't loaded yet, show the loading indicator.
     if (!this.state.cards.length) {
       return (
         <View style={styles.noMoreCards}>
-          <Query query={QUEUE_QUERY} fetchPolicy="network-only">
-            {({ loading, error, data }) => {
-              if (loading)
-                return (
-                  <View style={{ alignContent: "center" }}>
-                    <ActivityIndicator
-                      size="large"
-                      color="rgb(69,211,193)"
-                    />
-                  </View>
-                );
-              if (error)
-                return <Text>Whoops! Something went wrong.</Text>;
-              const cocktailCards = data.me.queue;
-              this.handleQueryComplete(cocktailCards);
-              return (
-                <View>
-                  {/* <StarterPack /> */}
-                  <SwipeCards
-                    cards={this.state.cards}
-                    loop={false}
-                    renderCard={cardData => <Card {...cardData} />}
-                    renderNoMoreCards={() => <NoMoreCards />}
-                    showYup={false}
-                    showNope={false}
-                    showMaybe={false}
-                    hasMaybeAction={true}
-                    handleYup={this.handleYup}
-                    handleNope={this.handleNope}
-                    handleMaybe={this.handleMaybe}
-                    cardRemoved={this.cardRemoved.bind(this)}
-                  />
-                </View>
-              );
-            }}
-          </Query>
-        </View>
+    <View style={{ alignContent: "center" }}>
+        <ActivityIndicator
+          size="large"
+          color="rgb(69,211,193)"
+        />
+    </View>
+    </View>
       );
     }
     return (
-
       <View style=
       {{
             flex: 1,
@@ -346,3 +311,61 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+
+class Card extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <View style={styles.card}>
+        <View>
+          <ImageBackground
+            style={styles.thumbnail}
+            source={{ uri: this.props.imageUrl }}
+          />
+        </View>
+        <View
+        style={{
+          backgroundColor: "rgb(242, 255, 253)",
+          opacity:.9,
+          width: "100%"
+        }}>
+          <Text
+            style={{
+              fontWeight: "bold",
+              color: "rgb(69,211,193)",
+              fontSize: 25,
+              textAlign: "center"
+            }}
+          >
+            {this.props.name.toUpperCase()}
+          </Text>
+          {this.props.ingredients.map((ingredient, idx) => {
+            return (
+              <Text style={styles.text} key={idx}>
+                {ingredient.ingredient.name.toLowerCase()}
+              </Text>
+            );
+          })}
+        </View>
+      </View>
+    );
+  }
+}
+
+class NoMoreCards extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <View style={styles.noMoreCards}>
+        <Text>No more cards</Text>
+      </View>
+    );
+  }
+}
